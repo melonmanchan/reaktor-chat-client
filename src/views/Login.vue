@@ -2,11 +2,8 @@
   <div class="login-form">
     <form class="pure-form pure-form-stacked">
       <fieldset>
-        <label for="name">Username</label>
+        <legend>Welcome to the chat.</legend>
         <input v-model="username" id="name" type="text" placeholder="Username" required>
-
-        <label for="channel">Channel</label>
-        <input v-model="channel" id="channel" type="text" placeholder="Channel name" required>
 
         <div class="pure-controls">
           <button v-on:click="join" type="submit" class="pure-button pure-button-primary">Join</button>
@@ -17,6 +14,9 @@
 </template>
 
 <script>
+import config from '../config/config'
+import events from '../socket/events'
+
 export default {
   data () {
     return {
@@ -26,9 +26,20 @@ export default {
   },
 
   methods: {
-    join () {
-      console.log(this.username)
-      console.log(this.channel)
+    join (event) {
+      event.preventDefault()
+
+      if (!this.username) {
+        return
+      }
+
+      window._socket = window.io(config.backend, { query: `username=${this.username}` })
+
+      window._socket.on(events.CONNECT, () => {
+        window.alert(1)
+      })
+
+      return false
     }
   }
 }
