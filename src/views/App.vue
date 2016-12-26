@@ -14,4 +14,8 @@ export default {
 </script>
 
 <style lang="scss">
+body {
+  height: 100vh;
+  width: 100vw;
+}
 </style>
