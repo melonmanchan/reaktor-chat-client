@@ -10,12 +10,25 @@ import Login    from './views/Login'
 Vue.use(VueRouter)
 
 const routes = [
-  { path: '/', component: Login },
+  { path: '/login', component: Login },
   { path: '/channels', component: Channels }
 ]
 
 const router = new VueRouter({
   routes
+})
+
+// Redirect to login if socket not connected
+router.beforeEach((to, from, next) => {
+  if (to.fullPath === '/login') {
+    return next()
+  }
+
+  if (!window._socket || !window._socket.connected) {
+    return next('login')
+  }
+
+  next()
 })
 
 /* eslint-disable no-new */
