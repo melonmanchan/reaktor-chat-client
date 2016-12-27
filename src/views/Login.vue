@@ -14,8 +14,12 @@
 </template>
 
 <script>
-import config from '../config/config'
-import events from '../socketio/events'
+import Promise from 'bluebird'
+
+import config                    from '../config/config'
+import { login }                 from '../api/auth'
+import { setAuthorizationToken } from '../api'
+import events                    from '../socketio/events'
 
 export default {
   data () {
@@ -35,6 +39,27 @@ export default {
   },
 
   methods: {
+    connectSocket (token) {
+      return new Promise((resolve, reject) => {
+        console.log('asdasdadsasdads')
+        window._socket = window.io(config.backend, { query: `token=${token}` })
+
+        window._socket.once(events.LOGGED_IN, () => {
+          resolve()
+        })
+
+        window._socket.once(events.NAME_TAKEN, () => {
+          window._socket.disconnect()
+          reject({ message: 'That username is taken!' })
+        })
+
+        window._socket.once(events.CONNECT_ERROR, () => {
+          window._socket.disconnect()
+          reject({ message: 'Something went wrong.' })
+        })
+      })
+    },
+
     join (event) {
       event.preventDefault()
 
@@ -44,23 +69,19 @@ export default {
 
       this.joinDisabled = true
 
-      window._socket = window.io(config.backend, { query: `username=${this.username}` })
-
-      window._socket.once(events.LOGGED_IN, () => {
-        this.$router.push('channels')
-      })
-
-      window._socket.once(events.NAME_TAKEN, () => {
-        this.errorMessage = 'That username is taken!'
-        this.joinDisabled = false
-        window._socket.disconnect()
-      })
-
-      window._socket.once(events.CONNECT_ERROR, () => {
-        this.errorMessage = 'Something went wrong. Try again later.'
-        this.joinDisabled = false
-        window._socket.disconnect()
-      })
+      login(this.username)
+        .then(res => {
+          const token = res.data.token
+          setAuthorizationToken(token)
+          return this.connectSocket(token)
+        })
+        .then(() => {
+          this.$router.push('channels')
+        })
+        .catch(e => {
+          this.errorMessage = e.message
+          this.joinDisabled = false
+        })
 
       return false
     }
