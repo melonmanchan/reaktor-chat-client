@@ -41,7 +41,6 @@ export default {
   methods: {
     connectSocket (token) {
       return new Promise((resolve, reject) => {
-        console.log('asdasdadsasdads')
         window._socket = window.io(config.backend, { query: `token=${token}` })
 
         window._socket.once(events.LOGGED_IN, () => {
