@@ -13,7 +13,7 @@
       </div>
       <form class="pure-form pure-g">
           <div class="pure-u-4-5">
-              <input v-model="newMessage" class="pure-input-1" type="text">
+            <textarea v-on:keyup.enter="sendMessage($event)" v-model="newMessage" class="pure-input-1"> </textarea>
           </div>
           <div class="pure-u-1-5">
             <button v-on:click="sendMessage" type="submit" class="pure-button pure-button-primary">Send</button>
@@ -54,6 +54,10 @@ export default {
     },
 
     sendMessage (e) {
+      if (e.shiftKey && e.code === 'Enter') {
+        return
+      }
+
       e.preventDefault()
 
       if (this.newMessage === '') {
