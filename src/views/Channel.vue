@@ -12,10 +12,8 @@
           </div>
       </div>
       <form class="pure-form pure-g">
-          <div class="pure-u-4-5">
+          <div class="pure-u-1 controls">
             <textarea id="messagebox" v-on:keyup.enter="sendMessage($event)" v-model="newMessage" class="pure-input-1"> </textarea>
-          </div>
-          <div class="pure-u-1-5">
             <button v-on:click="sendMessage" type="submit" class="pure-button pure-button-primary">Send</button>
           </div>
       </form>
@@ -135,9 +133,16 @@ export default {
     height: 90vh;
   }
 
+  textarea {
+    position: absolute;
+    bottom: 20px;
+    width: 80% !important;
+  }
+
   button {
-    margin: 0px !important;
     float: right;
+    margin-top: 0.7em;
+    width: 10% !important;
   }
 }
 </style>
