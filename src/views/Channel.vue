@@ -13,7 +13,7 @@
       </div>
       <form class="pure-form pure-g">
           <div class="pure-u-4-5">
-            <textarea v-on:keyup.enter="sendMessage($event)" v-model="newMessage" class="pure-input-1"> </textarea>
+            <textarea id="messagebox" v-on:keyup.enter="sendMessage($event)" v-model="newMessage" class="pure-input-1"> </textarea>
           </div>
           <div class="pure-u-1-5">
             <button v-on:click="sendMessage" type="submit" class="pure-button pure-button-primary">Send</button>
@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import autosize from 'autosize'
 import { joinChannel } from '../api/channels'
 
 export default {
@@ -31,6 +32,7 @@ export default {
     return {
       messages: [],
       newMessage: '',
+      messageBox: null,
       key: null
     }
   },
@@ -53,6 +55,14 @@ export default {
       this.messages.push({ type, message, user })
     },
 
+    resizeTextArea () {
+      setTimeout(() => {
+        const evt = document.createEvent('Event')
+        evt.initEvent('autosize:update', true, false)
+        this.messageBox.dispatchEvent(evt)
+      }, 0)
+    },
+
     sendMessage (e) {
       if (e.shiftKey && e.code === 'Enter') {
         return
@@ -66,8 +76,8 @@ export default {
 
       window._socket.emit('message:post', { channel: this.key, message : this.newMessage })
 
+      this.resizeTextArea()
       this.addMessage(this.newMessage, { username: 'You' })
-
       this.newMessage = ''
 
       return false
@@ -92,6 +102,9 @@ export default {
     window._socket.on('message:post', (data) => {
       this.addMessage(data.message, data.user)
     })
+
+    this.messageBox = this.$el.querySelector('#messagebox')
+    autosize(this.messageBox)
 
     this.joinChannel(key)
       .then((res) => {

@@ -10,6 +10,7 @@
     "lint": "eslint --ext .js,.vue src"
   },
   "dependencies": {
+    "autosize": "^3.0.20",
     "axios": "^0.15.3",
     "bluebird": "^3.4.7",
     "node-sass": "^4.1.1",
