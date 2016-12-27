@@ -1,23 +1,25 @@
 <template>
-  <div class="channel-view">
-    <div class="pure-g messages">
-        <div class="pure-u-7-8" v-for="m in messages">
-          <div v-if="m.type === 'system'">
-            <p class="system">{{m.message}}</p>
+  <div class="channel-view-wrapper">
+    <div class="channel-view">
+      <div id="messages" class="pure-g messages">
+          <div class="pure-u-7-8" v-for="m in messages">
+            <div v-if="m.type === 'system'">
+              <p class="system">{{m.message}}</p>
+            </div>
+            <div v-if="m.type === 'message'">
+              <p class="message"><span>{{m.user.username}}: </span>{{m.message}}</p>
+            </div>
           </div>
-          <div v-if="m.type === 'message'">
-            <p class="message"><span>{{m.user.username}}: </span>{{m.message}}</p>
+      </div>
+      <form class="pure-form pure-g">
+          <div class="pure-u-4-5">
+              <input v-model="newMessage" class="pure-input-1" type="text">
           </div>
-        </div>
+          <div class="pure-u-1-5">
+            <button v-on:click="sendMessage" type="submit" class="pure-button pure-button-primary">Send</button>
+          </div>
+      </form>
     </div>
-    <form class="pure-form pure-g">
-        <div class="pure-u-4-5">
-            <input v-model="newMessage" class="pure-input-1" type="text">
-        </div>
-        <div class="pure-u-1-5">
-          <button v-on:click="sendMessage" type="submit" class="pure-button pure-button-primary">Send</button>
-        </div>
-    </form>
   </div>
 </template>
 
@@ -33,10 +35,24 @@ export default {
     }
   },
 
+  watch: {
+    messages () {
+      this.$nextTick(() => {
+        const messageArea = document.getElementById('messages')
+        messageArea.scrollTop = messageArea.scrollHeight
+      })
+    }
+  },
+
   methods: {
     joinChannel (key) {
       return joinChannel(key)
     },
+
+    addMessage (message, user, type = 'message') {
+      this.messages.push({ type, message, user })
+    },
+
     sendMessage (e) {
       e.preventDefault()
 
@@ -46,7 +62,7 @@ export default {
 
       window._socket.emit('message:post', { channel: this.key, message : this.newMessage })
 
-      this.messages.push({ type: 'message', message: this.newMessage, user: { username: 'You' } })
+      this.addMessage(this.newMessage, { username: 'You' })
 
       this.newMessage = ''
 
@@ -63,15 +79,14 @@ export default {
     const key = this.$route.params.id
     this.key = key
 
-    window._socket.on('user:joined', (data) => {
-      const message = { type: 'system', message: `User ${data.username} joined.` }
+    window._socket.on('user:joined', (user) => {
+      const message = `User ${user.username} joined`
 
-      this.messages.push(message)
+      this.addMessage(message, user, 'system')
     })
 
     window._socket.on('message:post', (data) => {
-      data.type = 'message'
-      this.messages.push(data)
+      this.addMessage(data.message, data.user)
     })
 
     this.joinChannel(key)
@@ -85,17 +100,26 @@ export default {
 }
 </script>
 
-<style lang="scss" scoped>
-.channel-view {
+<style lang="scss">
+
+.channel-view-wrapper {
+  display: flex;
+  justify-content: center;
   height: 100vh;
   width: 100vw;
+}
+
+.channel-view {
+  height: 90vh;
+  width: 95vw;
 
   .messages {
-    overflow-y: scroll;
+    overflow-y: auto;
     height: 90vh;
   }
 
   button {
+    margin: 0px !important;
     float: right;
   }
 }
