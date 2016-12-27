@@ -2,11 +2,11 @@
   <div class="login-form">
     <form class="pure-form pure-form-stacked">
       <fieldset>
-        <legend>Welcome to the chat.</legend>
+        <legend>Welcome to the chat</legend>
         <input v-model="username" id="name" type="text" placeholder="Username" required>
 
         <div class="pure-controls">
-          <button v-on:click="join" type="submit" class="pure-button pure-button-primary">Join</button>
+          <button :disabled="joinDisabled" v-on:click="join" type="submit" class="pure-button pure-button-primary">Join</button>
         </div>
       </fieldset>
     </form>
@@ -21,7 +21,7 @@ export default {
   data () {
     return {
       username: '',
-      channel: ''
+      joinDisabled: false
     }
   },
 
@@ -32,6 +32,8 @@ export default {
       if (!this.username) {
         return
       }
+
+      this.joinDisabled = true
 
       window._socket = window.io(config.backend, { query: `username=${this.username}` })
 
@@ -56,6 +58,10 @@ export default {
   button {
     margin-top: 10px;
     width: 100%;
+  }
+
+  legend {
+    text-align: center;
   }
 }
 </style>
