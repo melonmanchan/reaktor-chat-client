@@ -1,14 +1,17 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
-import Vue from 'vue'
-import App from './views/App'
-import Login from './views/Login'
+import Vue       from 'vue'
 import VueRouter from 'vue-router'
+
+import App      from './views/App'
+import Channels from './views/Channels'
+import Login    from './views/Login'
 
 Vue.use(VueRouter)
 
 const routes = [
-  { path: '/', component: Login }
+  { path: '/', component: Login },
+  { path: '/channels', component: Channels }
 ]
 
 const router = new VueRouter({

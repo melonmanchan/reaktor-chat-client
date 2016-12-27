@@ -47,7 +47,7 @@ export default {
       window._socket = window.io(config.backend, { query: `username=${this.username}` })
 
       window._socket.once(events.LOGGED_IN, () => {
-        console.log('logged in')
+        this.$router.push('channels')
       })
 
       window._socket.once(events.NAME_TAKEN, () => {
