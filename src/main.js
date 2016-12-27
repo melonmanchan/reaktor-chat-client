@@ -10,8 +10,8 @@ import Login    from './views/Login'
 Vue.use(VueRouter)
 
 const routes = [
-  { path: '/login', component: Login },
-  { path: '/channels', component: Channels }
+  { path: '/login', component: Login, meta: { title: 'Login' } },
+  { path: '/channels', component: Channels, meta: { title: 'Channels' } }
 ]
 
 const router = new VueRouter({
@@ -20,6 +20,8 @@ const router = new VueRouter({
 
 // Redirect to login if socket not connected
 router.beforeEach((to, from, next) => {
+  document.title = to.meta.title
+
   if (to.fullPath === '/login') {
     return next()
   }
