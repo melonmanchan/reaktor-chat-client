@@ -4,14 +4,16 @@ import Vue       from 'vue'
 import VueRouter from 'vue-router'
 
 import App      from './views/App'
+import Channel  from './views/Channel'
 import Channels from './views/Channels'
 import Login    from './views/Login'
 
 Vue.use(VueRouter)
 
 const routes = [
-  { path: '/login', component: Login, meta: { title: 'Login' } },
-  { path: '/channels', component: Channels, meta: { title: 'Channels' } }
+  { path: '/login', name: 'login', component: Login, meta: { title: 'Login' } },
+  { path: '/channels', name: 'channels', component: Channels, meta: { title: 'Channels' } },
+  { path: '/channel/:id', name: 'channel', component: Channel, meta: { title: 'Channel' } }
 ]
 
 const router = new VueRouter({

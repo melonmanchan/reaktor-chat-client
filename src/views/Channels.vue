@@ -40,10 +40,7 @@ export default {
         })
     },
     join (channel) {
-      console.log(channel.key)
-    },
-    createChannel (name) {
-      console.log(name)
+      this.$router.push({ name: 'channel', params: { id: channel.key } })
     }
   }
 }
