@@ -2,10 +2,13 @@
   <div class="channel-view-wrapper">
     <div class="channel-view">
       <div id="messages" class="pure-g messages">
-          <div class="pure-u-7-8" v-for="m in messages">
+          <div class="pure-u-7-8 message-area" v-for="m in messages">
             <div class="message-wrapper" v-bind:class="m.type">
-              <p class="message"><span>{{m.user.username}}: </span>{{m.message}}</p>
-              <span class="timestamp">{{ m.date | moment("from") }}</span>
+              <div class="message-info">
+                <span class="username">{{m.user.username}}</span>
+                <span class="timestamp">{{ m.date | moment("from") }}</span>
+              </div>
+              <div class="message-content">{{m.message}}</div>
             </div>
           </div>
       </div>
@@ -48,7 +51,8 @@ export default {
     },
 
     addMessage (message, user, date, type = 'message') {
-      this.messages.push({ type, message, date, user })
+      const trimmed = message.replace(/^\s+|\s+$/g, '')
+      this.messages.push({ type, message: trimmed, date, user })
     },
 
     resizeTextArea () {
@@ -92,7 +96,7 @@ export default {
     window._socket.on('user:joined', (user) => {
       const message = `User ${user.username} joined`
 
-      this.addMessage(message, { username: 'system' }, new Date(), 'system')
+      this.addMessage(message, { username: 'System' }, new Date(), 'system')
     })
 
     window._socket.on('message:post', (data) => {
@@ -153,6 +157,32 @@ export default {
     #messagebox {
      width: 80%;
     }
+  }
+
+  .message-wrapper {
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
+
+  .message-info {
+    width: 250px;
+    font-size: 0.8em;
+  }
+
+  .message-content {
+    line-height: 1.7;
+    white-space: pre-wrap;
+    font-size: 0.9em;
+    margin-top: 10px;
+  }
+
+  .username {
+    font-weight: 700;
+  }
+
+  .timestamp {
+    opacity: 0.6;
+    float: right;
   }
 
 }
