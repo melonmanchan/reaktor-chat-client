@@ -99,6 +99,9 @@ export default {
 
   mounted () {
     const key = this.$route.params.id
+    const name = this.$route.params.name
+
+    document.title = `${name}`
     this.key = key
 
     window._socket.on(events.USER_JOINED, (user) => {
