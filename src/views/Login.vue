@@ -3,8 +3,9 @@
     <form class="pure-form pure-form-stacked">
       <fieldset>
         <legend>Welcome to the chat</legend>
-        <input v-bind:class="{error: errorMessage }" v-model="username" id="name" type="text" placeholder="Username" required>
         <div v-if="errorMessage" class="error-message">{{errorMessage}}</div>
+        <input v-bind:class="{error: errorMessage }" v-model="username" id="name" type="text" placeholder="Username" required>
+        <input v-bind:class="{error: errorMessage }" v-model="password" id="password" type="password" placeholder="Password" required>
         <div class="pure-controls">
           <button :disabled="joinDisabled" v-on:click="join" type="submit" class="pure-button pure-button-primary">Join</button>
         </div>
@@ -25,6 +26,7 @@ export default {
   data () {
     return {
       username: '',
+      password: '',
       errorMessage: null,
       joinDisabled: false
     }
@@ -62,13 +64,13 @@ export default {
     join (event) {
       event.preventDefault()
 
-      if (!this.username) {
+      if (!this.username || !this.password) {
         return
       }
 
       this.joinDisabled = true
 
-      login(this.username)
+      login(this.username, this.password)
         .then(res => {
           const token = res.data.token
           setAuthorizationToken(token)
@@ -78,7 +80,12 @@ export default {
           this.$router.push('channels')
         })
         .catch(e => {
-          this.errorMessage = e.message
+          if (e.response) {
+            this.errorMessage = e.response.data.error
+          } else {
+            this.errorMessage = e.message
+          }
+
           this.joinDisabled = false
         })
 
