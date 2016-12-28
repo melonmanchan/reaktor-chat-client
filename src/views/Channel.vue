@@ -92,6 +92,7 @@ export default {
 
   beforeDestroy () {
     window._socket.off('user:joined')
+    window._socket.off('user:left')
     window._socket.off('message:post')
   },
 
@@ -100,7 +101,13 @@ export default {
     this.key = key
 
     window._socket.on('user:joined', (user) => {
-      const message = `User ${user.username} joined`
+      const message = `User ${user.username} joined...`
+
+      this.addMessage(message, { username: 'System' }, new Date(), 'system')
+    })
+
+    window._socket.on('user:quit', (user) => {
+      const message = `User ${user.username} quit...`
 
       this.addMessage(message, { username: 'System' }, new Date(), 'system')
     })
