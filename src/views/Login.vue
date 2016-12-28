@@ -9,18 +9,19 @@
         <div class="pure-controls">
           <button :disabled="joinDisabled" v-on:click="join" type="submit" class="pure-button pure-button-primary">Join</button>
         </div>
+
+        <div class="register-notice">
+          <router-link to="/register">Register »</router-link>
+        </div>
       </fieldset>
     </form>
   </div>
 </template>
 
 <script>
-import Promise from 'bluebird'
-
-import config                    from '../config/config'
+import connectSocket             from '../socketio/connect'
 import { login }                 from '../api/auth'
 import { setAuthorizationToken } from '../api'
-import events                    from '../socketio/events'
 
 export default {
   data () {
@@ -41,26 +42,6 @@ export default {
   },
 
   methods: {
-    connectSocket (token) {
-      return new Promise((resolve, reject) => {
-        window._socket = window.io(config.backend, { query: `token=${token}` })
-
-        window._socket.once(events.LOGGED_IN, () => {
-          resolve()
-        })
-
-        window._socket.once(events.NAME_TAKEN, () => {
-          window._socket.disconnect()
-          reject({ message: 'That username is taken!' })
-        })
-
-        window._socket.once(events.CONNECT_ERROR, () => {
-          window._socket.disconnect()
-          reject({ message: 'Something went wrong.' })
-        })
-      })
-    },
-
     join (event) {
       event.preventDefault()
 
@@ -74,7 +55,7 @@ export default {
         .then(res => {
           const token = res.data.token
           setAuthorizationToken(token)
-          return this.connectSocket(token)
+          return connectSocket(token)
         })
         .then(() => {
           this.$router.push('channels')
@@ -125,5 +106,12 @@ export default {
     margin: 5px 0 0;
   }
 
+  .register-notice {
+    font-size: .8em;
+    margin-top: .5em;
+    border-top: 1px solid #e5e5e5;
+    text-align: center;
+    padding: .3em 0;
+  }
 }
 </style>

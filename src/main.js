@@ -8,12 +8,14 @@ import App      from './views/App'
 import Channel  from './views/Channel'
 import Channels from './views/Channels'
 import Login    from './views/Login'
+import Register from './views/Register'
 
 Vue.use(VueRouter)
 Vue.use(VueMoment)
 
 const routes = [
   { path: '/login', name: 'login', component: Login, meta: { title: 'Login' } },
+  { path: '/register', name: 'register', component: Register, meta: { title: 'Register an account' } },
   { path: '/channels', name: 'channels', component: Channels, meta: { title: 'Channels' } },
   { path: '/channel/:id', name: 'channel', component: Channel, meta: { title: 'Channel' } }
 ]
@@ -26,7 +28,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   document.title = to.meta.title
 
-  if (to.fullPath === '/login') {
+  if (to.fullPath === '/login' || to.fullPath === '/register') {
     return next()
   }
 

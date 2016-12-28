@@ -5,4 +5,8 @@ function login (name, password) {
   return axios.post(`${config.backend}/auth/login`, { name, password })
 }
 
-export { login }
+function register (name, password) {
+  return axios.post(`${config.backend}/auth/register`, { name, password })
+}
+
+export { login, register }
