@@ -68,7 +68,7 @@ export default {
         return
       }
 
-      if (this.username.length < 6) {
+      if (this.username.length < 3) {
         this.errorMessage = 'Username too short (minimum of 3 characters)'
         return
       }
