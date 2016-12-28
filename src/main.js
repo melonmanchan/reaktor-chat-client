@@ -2,6 +2,7 @@
 // (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue       from 'vue'
 import VueRouter from 'vue-router'
+import VueMoment from 'vue-moment'
 
 import App      from './views/App'
 import Channel  from './views/Channel'
@@ -9,6 +10,7 @@ import Channels from './views/Channels'
 import Login    from './views/Login'
 
 Vue.use(VueRouter)
+Vue.use(VueMoment)
 
 const routes = [
   { path: '/login', name: 'login', component: Login, meta: { title: 'Login' } },

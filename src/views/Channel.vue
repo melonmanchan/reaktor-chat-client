@@ -3,11 +3,9 @@
     <div class="channel-view">
       <div id="messages" class="pure-g messages">
           <div class="pure-u-7-8" v-for="m in messages">
-            <div v-if="m.type === 'system'">
-              <p class="system">{{m.message}}</p>
-            </div>
-            <div v-if="m.type === 'message'">
+            <div class="message-wrapper" v-bind:class="m.type">
               <p class="message"><span>{{m.user.username}}: </span>{{m.message}}</p>
+              <span class="timestamp">{{ m.date | moment("from") }}</span>
             </div>
           </div>
       </div>
@@ -49,8 +47,8 @@ export default {
       return joinChannel(key)
     },
 
-    addMessage (message, user, type = 'message') {
-      this.messages.push({ type, message, user })
+    addMessage (message, user, date, type = 'message') {
+      this.messages.push({ type, message, date, user })
     },
 
     resizeTextArea () {
@@ -75,7 +73,7 @@ export default {
       window._socket.emit('message:post', { channel: this.key, message : this.newMessage })
 
       this.resizeTextArea()
-      this.addMessage(this.newMessage, { username: 'You' })
+      this.addMessage(this.newMessage, { username: 'You' }, new Date())
       this.newMessage = ''
 
       return false
@@ -94,11 +92,11 @@ export default {
     window._socket.on('user:joined', (user) => {
       const message = `User ${user.username} joined`
 
-      this.addMessage(message, user, 'system')
+      this.addMessage(message, { username: 'system' }, new Date(), 'system')
     })
 
     window._socket.on('message:post', (data) => {
-      this.addMessage(data.message, data.user)
+      this.addMessage(data.message, data.user, data.date)
     })
 
     this.messageBox = this.$el.querySelector('#messagebox')
