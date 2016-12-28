@@ -13,7 +13,7 @@
       </div>
       <form class="pure-form pure-g">
           <div class="pure-u-1 controls">
-            <textarea id="messagebox" v-on:keyup.enter="sendMessage($event)" v-model="newMessage" class="pure-input-1"> </textarea>
+            <textarea placeholder="Your message..." id="messagebox" v-on:keyup.enter="sendMessage($event)" v-model="newMessage" class="pure-input-1"> </textarea>
             <button v-on:click="sendMessage" type="submit" class="pure-button pure-button-primary">Send</button>
           </div>
       </form>
@@ -133,10 +133,10 @@ export default {
     height: 90vh;
   }
 
-  textarea {
+  #messagebox {
     position: absolute;
     bottom: 20px;
-    width: 80% !important;
+    width: 90%;
   }
 
   button {
@@ -144,5 +144,18 @@ export default {
     margin-top: 0.7em;
     width: 10% !important;
   }
+
+  @media (min-width: 600px) {
+    button {
+      display: none;
+    }
+  }
+
+  @media (max-width: 600px) {
+    #messagebox {
+     width: 80%;
+    }
+  }
+
 }
 </style>
