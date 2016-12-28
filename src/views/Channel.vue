@@ -27,6 +27,7 @@ import autosize from 'autosize'
 import marked   from 'marked'
 import emojione from 'emojione'
 
+import events from '../socketio/events'
 import { joinChannel } from '../api/channels'
 
 export default {
@@ -80,7 +81,7 @@ export default {
         return
       }
 
-      window._socket.emit('message:post', { channel: this.key, message : this.newMessage })
+      window._socket.emit(events.MESSAGE_POST, { channel: this.key, message : this.newMessage })
 
       this.resizeTextArea()
       this.addMessage(this.newMessage, { username: 'You' }, new Date())
@@ -91,28 +92,28 @@ export default {
   },
 
   beforeDestroy () {
-    window._socket.off('user:joined')
-    window._socket.off('user:left')
-    window._socket.off('message:post')
+    window._socket.off(events.USER_JOINED)
+    window._socket.off(events.USER_LEFT)
+    window._socket.off(events.MESSAGE_POST)
   },
 
   mounted () {
     const key = this.$route.params.id
     this.key = key
 
-    window._socket.on('user:joined', (user) => {
+    window._socket.on(events.USER_JOINED, (user) => {
       const message = `User ${user.username} joined...`
 
       this.addMessage(message, { username: 'System' }, new Date(), 'system')
     })
 
-    window._socket.on('user:quit', (user) => {
+    window._socket.on(events.USER_QUIT, (user) => {
       const message = `User ${user.username} quit...`
 
       this.addMessage(message, { username: 'System' }, new Date(), 'system')
     })
 
-    window._socket.on('message:post', (data) => {
+    window._socket.on(events.MESSAGE_POST, (data) => {
       this.addMessage(data.message, data.user, data.date)
     })
 
