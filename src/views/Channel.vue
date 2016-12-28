@@ -25,6 +25,7 @@
 <script>
 import autosize from 'autosize'
 import marked   from 'marked'
+import emojione from 'emojione'
 
 import { joinChannel } from '../api/channels'
 
@@ -54,7 +55,8 @@ export default {
 
     addMessage (message, user, date, type = 'message') {
       const trimmed = message.replace(/^\s+|\s+$/g, '')
-      const asMarkdown = marked(trimmed)
+      const withEmojis = emojione.toImage(trimmed)
+      const asMarkdown = marked(withEmojis)
       this.messages.push({ type, message: asMarkdown, date, user })
     },
 
@@ -73,7 +75,8 @@ export default {
 
       e.preventDefault()
 
-      if (this.newMessage === '') {
+      if (this.newMessage === '' || !(/\S/.test(this.newMessage))) {
+        this.newMessage = ''
         return
       }
 
@@ -93,7 +96,6 @@ export default {
   },
 
   mounted () {
-    console.log(this.$options)
     const key = this.$route.params.id
     this.key = key
 
@@ -164,13 +166,16 @@ export default {
   }
 
   .message-wrapper {
-    margin-top: 10px;
-    margin-bottom: 10px;
+    min-height: 80px;
   }
 
   .message-info {
     width: 250px;
     font-size: 0.8em;
+  }
+
+  .message-area {
+    width: 95%;
   }
 
   .message-content {
