@@ -8,7 +8,7 @@
                 <span class="username">{{m.user.username}}</span>
                 <span class="timestamp">{{ m.date | moment("from") }}</span>
               </div>
-              <div class="message-content">{{m.message}}</div>
+              <div class="message-content" v-html="m.message"></div>
             </div>
           </div>
       </div>
@@ -24,6 +24,8 @@
 
 <script>
 import autosize from 'autosize'
+import marked   from 'marked'
+
 import { joinChannel } from '../api/channels'
 
 export default {
@@ -52,7 +54,8 @@ export default {
 
     addMessage (message, user, date, type = 'message') {
       const trimmed = message.replace(/^\s+|\s+$/g, '')
-      this.messages.push({ type, message: trimmed, date, user })
+      const asMarkdown = marked(trimmed)
+      this.messages.push({ type, message: asMarkdown, date, user })
     },
 
     resizeTextArea () {
@@ -90,6 +93,7 @@ export default {
   },
 
   mounted () {
+    console.log(this.$options)
     const key = this.$route.params.id
     this.key = key
 
