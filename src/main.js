@@ -33,9 +33,7 @@ router.beforeEach((to, from, next) => {
   const isConnected = (window._socket && window._socket.connected)
   const goingToNonAuthView = (to.fullPath === '/login' || to.fullPath === '/register')
 
-  if (isConnected && goingToNonAuthView) {
-    return next('channels')
-  } else if (goingToNonAuthView) {
+  if (goingToNonAuthView) {
     return next()
   }
 
