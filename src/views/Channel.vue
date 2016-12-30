@@ -126,6 +126,19 @@ export default {
 
       if (document.hidden) {
         sendNotification(`${this.name} | ${user.username}`, message)
+        this.enableTitleNotify()
+      }
+    },
+
+    enableTitleNotify () {
+      if (!document.title.startsWith('*')) {
+        document.title = '*' + document.title
+      }
+    },
+
+    disableTitleNotify () {
+      if (document.title.startsWith('*')) {
+        document.title = document.title.substring(1)
       }
     },
 
@@ -161,6 +174,7 @@ export default {
   },
 
   beforeDestroy () {
+    delete window.onfocus
     window._socket.off(events.USER_JOINED)
     window._socket.off(events.USER_LEFT)
     window._socket.off(events.MESSAGE_POST)
@@ -174,6 +188,11 @@ export default {
 
     this.key = key
     this.name = name
+
+    this.messageBox = this.$el.querySelector('#messagebox')
+    this.messageArea = this.$el.querySelector('#messages')
+
+    window.onfocus = () => { this.disableTitleNotify() }
 
     window._socket.on(events.USER_JOINED, (user) => {
       const message = `User ${user.username} joined...`
@@ -190,9 +209,6 @@ export default {
     window._socket.on(events.MESSAGE_POST, (data) => {
       this.addMessage(data.message, data.user, data.date)
     })
-
-    this.messageBox = this.$el.querySelector('#messagebox')
-    this.messageArea = this.$el.querySelector('#messages')
 
     autosize(this.messageBox)
 
