@@ -4,11 +4,11 @@
       <fieldset>
         <legend>Register an account</legend>
         <div v-if="errorMessage" class="error-message">{{errorMessage}}</div>
-        <input minlength="3" v-bind:class="{error: errorMessage }" v-model="username" id="name" type="text" placeholder="Username" required>
-        <input minlength="6" v-bind:class="{error: errorMessage }" v-model="password" id="password" type="password" placeholder="Password" required>
-        <input minlength="6" v-bind:class="{error: errorMessage }" v-model="passwordAgain" id="passwordAgain" type="password" placeholder="Password again" required>
+        <input minlength="3" v-bind:class="{ error: usernameError }"  v-model="username" id="name" type="text" placeholder="Username" required>
+        <input minlength="6" v-bind:class="{ error: passwordError }" v-model="password" id="password" type="password" placeholder="Password" required>
+        <input minlength="6" v-bind:class="{ error: passwordError }" v-model="passwordAgain" id="passwordAgain" type="password" placeholder="Password again" required>
         <div class="pure-controls">
-          <button :disabled="registerDisabled" v-on:click="register" type="submit" class="pure-button pure-button-primary">Login</button>
+          <button :disabled="registerDisabled" v-on:click="register" type="submit" class="pure-button pure-button-primary">Register</button>
         </div>
       </fieldset>
         <div class="login-notice">
@@ -19,6 +19,8 @@
 </template>
 
 <script>
+import debounce from 'lodash.debounce'
+
 import connectSocket             from '../socketio/connect'
 import { register }              from '../api/auth'
 import { setAuthorizationToken } from '../api'
@@ -29,29 +31,48 @@ export default {
       username: '',
       password: '',
       passwordAgain: '',
+
+      usernameError: false,
+      passwordError: false,
+
       errorMessage: null,
       registerDisabled: false
     }
   },
 
   watch: {
-    password (val) {
-      if (val !== this.passwordAgain) {
-        this.errorMessage = 'Passwords do not match'
-      } else {
-        this.errorMessage = null
+    username (val) {
+      if (val.length > 3 && this.usernameError) {
+        this.usernameError = false
       }
     },
-    passwordAgain (val) {
-      if (val !== this.password) {
-        this.errorMessage = 'Passwords do not match'
-      } else {
+    password (val) {
+      if (val === this.passwordAgain) {
         this.errorMessage = null
+        this.passwordError = false
+      } else {
+        this.debouncedPasswordMatch()
+      }
+    },
+
+    passwordAgain (val) {
+      if (val === this.password) {
+        this.errorMessage = null
+        this.passwordError = false
+      } else {
+        this.debouncedPasswordMatch()
       }
     }
   },
 
   methods: {
+    debouncedPasswordMatch: debounce(function () {
+      if (this.password !== this.passwordAgain) {
+        this.errorMessage = 'Passwords do not match'
+        this.passwordError = true
+      }
+    }, 2000),
+
     register (event) {
       event.preventDefault()
 
@@ -65,11 +86,13 @@ export default {
 
       if (this.password.length < 6) {
         this.errorMessage = 'Password too short (minimum of 6 characters)'
+        this.passwordError = true
         return
       }
 
       if (this.username.length < 3) {
         this.errorMessage = 'Username too short (minimum of 3 characters)'
+        this.usernameError = true
         return
       }
 
