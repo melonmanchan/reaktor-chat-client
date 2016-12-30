@@ -20,6 +20,7 @@
 
 <script>
 import connectSocket             from '../socketio/connect'
+import Storage                   from '../localstorage'
 import { login }                 from '../api/auth'
 import { setAuthorizationToken } from '../api'
 import { requestPermission }     from '../notifications'
@@ -54,6 +55,7 @@ export default {
 
       login(this.username, this.password)
         .then(res => {
+          Storage.saveAuthInfo(res.data)
           const token = res.data.token
           setAuthorizationToken(token)
           return connectSocket(token)

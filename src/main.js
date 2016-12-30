@@ -1,8 +1,11 @@
-// The Vue build version to load with the `import` command
-// (runtime-only or standalone) has been set in webpack.base.conf with an alias.
 import Vue       from 'vue'
 import VueRouter from 'vue-router'
 import VueMoment from 'vue-moment'
+import Promise   from 'bluebird'
+
+import Storage                   from './localstorage'
+import connectSocket             from './socketio/connect'
+import { setAuthorizationToken } from './api'
 
 import App      from './views/App'
 import Channel  from './views/Channel'
@@ -27,20 +30,35 @@ const router = new VueRouter({
 // Redirect to login if socket not connected
 router.beforeEach((to, from, next) => {
   document.title = to.meta.title
+  const isConnected = (window._socket && window._socket.connected)
+  const goingToNonAuthView = (to.fullPath === '/login' || to.fullPath === '/register')
 
-  if (to.fullPath === '/login' || to.fullPath === '/register') {
+  if (isConnected && goingToNonAuthView) {
+    return next('channels')
+  } else if (goingToNonAuthView) {
     return next()
   }
 
-  if (!window._socket || !window._socket.connected) {
+  if (!isConnected) {
     return next('login')
   }
 
   next()
 })
 
-/* eslint-disable no-new */
-new Vue({
-  router,
-  render: h => h(App)
-}).$mount('#app')
+const possibleToken = Storage.getTokenIfValid()
+
+if (possibleToken) {
+  setAuthorizationToken(possibleToken)
+}
+
+const socketConnectPromise = (typeof possibleToken === 'undefined') ? Promise.resolve : connectSocket
+
+socketConnectPromise(possibleToken)
+.finally(() => {
+  /* eslint-disable no-new */
+  new Vue({
+    router,
+    render: h => h(App)
+  }).$mount('#app')
+})
