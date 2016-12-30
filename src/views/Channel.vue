@@ -46,14 +46,6 @@ export default {
     }
   },
 
-  watch: {
-    messages () {
-      this.$nextTick(() => {
-        this.messageArea.scrollTop = this.messageArea.scrollHeight
-      })
-    }
-  },
-
   methods: {
     handleHistoryScroll: debounce(function (event) {
       if (this.historyLoaded) {
@@ -67,6 +59,12 @@ export default {
       }
     }, 500),
 
+    scrollMessageBoxToBottom () {
+      this.$nextTick(() => {
+        this.messageArea.scrollTop = this.messageArea.scrollHeight
+      })
+    },
+
     joinChannel (key) {
       return joinChannel(key)
     },
@@ -79,16 +77,18 @@ export default {
       const start = this.historyPoint
       const end = start + this.historyIncrement
 
+      const oldHeight = this.messageArea.scrollHeight
+
       loadHistory(this.key, start, end)
         .then(res => {
-          this.addMessagesToHistory(res.data.messages)
+          this.addMessagesToHistory(res.data.messages, oldHeight)
         })
         .catch(e => {
           console.log(e)
         })
     },
 
-    addMessagesToHistory (apiArray) {
+    addMessagesToHistory (apiArray, oldHeight) {
       const messagesAsObjects = stringArrayToJSON(apiArray)
 
       const formattedMessages = messagesAsObjects.map(m => {
@@ -98,7 +98,15 @@ export default {
         return m
       })
 
-      this.messages = this.messages.concat(formattedMessages)
+      this.messages = formattedMessages.concat(this.messages)
+
+      // We want to keep user scroll at the position it was at before loading new stuff
+      if (oldHeight) {
+        this.$nextTick(() => {
+          const scrollDiff = this.messageArea.scrollHeight - oldHeight
+          this.messageArea.scrollTop += scrollDiff
+        })
+      }
 
       // No more messages in history to load
       if (formattedMessages.length < 25) {
@@ -113,6 +121,7 @@ export default {
       const formatted = this.formatMessage(trimmed)
 
       this.messages.push({ type, message: formatted, date, user })
+      this.scrollMessageBoxToBottom()
     },
 
     resizeTextArea () {
@@ -182,6 +191,7 @@ export default {
     this.joinChannel(key)
       .then((res) => {
         this.addMessagesToHistory(res.data.messages)
+        this.scrollMessageBoxToBottom()
       })
       .catch(e => {
         console.log(e)

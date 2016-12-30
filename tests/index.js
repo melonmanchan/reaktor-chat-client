@@ -8,4 +8,3 @@ test('Should render emojipasta correctly', (t) => {
   t.equal(emojifyString(goodShit), expectedShit)
   t.end()
 })
-
