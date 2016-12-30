@@ -22,6 +22,7 @@
 import connectSocket             from '../socketio/connect'
 import { login }                 from '../api/auth'
 import { setAuthorizationToken } from '../api'
+import { requestPermission }     from '../notifications'
 
 export default {
   data () {
@@ -58,6 +59,7 @@ export default {
           return connectSocket(token)
         })
         .then(() => {
+          requestPermission()
           this.$router.push('channels')
         })
         .catch(e => {

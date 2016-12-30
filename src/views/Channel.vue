@@ -27,6 +27,7 @@ import autosize from 'autosize'
 import debounce from 'lodash.debounce'
 
 import events from '../socketio/events'
+import { sendNotification } from '../notifications'
 import { joinChannel, loadHistory } from '../api/channels'
 import { stringArrayToJSON, markdownifyString, emojifyString } from '../utils'
 
@@ -39,6 +40,7 @@ export default {
       messageArea: null,
 
       key: null,
+      name: null,
 
       historyLoaded: false,
       historyPoint: 0,
@@ -121,6 +123,10 @@ export default {
       const formatted = this.formatMessage(trimmed)
 
       this.messages.push({ type, message: formatted, date, user })
+
+      if (document.hidden) {
+        sendNotification(`${this.name} | ${user.username}`, message)
+      }
     },
 
     resizeTextArea () {
@@ -165,7 +171,9 @@ export default {
     const name = this.$route.params.name
 
     document.title = `${name}`
+
     this.key = key
+    this.name = name
 
     window._socket.on(events.USER_JOINED, (user) => {
       const message = `User ${user.username} joined...`
