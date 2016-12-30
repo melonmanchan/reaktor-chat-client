@@ -1,7 +1,7 @@
 <template>
   <div class="channel-view-wrapper">
     <div class="channel-view">
-      <div id="messages" class="pure-g messages">
+      <div v-on:scroll="handleHistoryScroll" id="messages" class="pure-g messages">
           <div class="pure-u-7-8 message-area" v-for="m in messages">
             <div class="message-wrapper" v-bind:class="m.type">
               <div class="message-info">
@@ -24,9 +24,10 @@
 
 <script>
 import autosize from 'autosize'
+import debounce from 'lodash.debounce'
 
 import events from '../socketio/events'
-import { joinChannel } from '../api/channels'
+import { joinChannel, loadHistory } from '../api/channels'
 import { stringArrayToJSON, markdownifyString, emojifyString } from '../utils'
 
 export default {
@@ -35,26 +36,76 @@ export default {
       messages: [],
       newMessage: '',
       messageBox: null,
-      key: null
+      messageArea: null,
+
+      key: null,
+
+      historyLoaded: false,
+      historyPoint: 0,
+      historyIncrement: 25
     }
   },
 
   watch: {
     messages () {
       this.$nextTick(() => {
-        const messageArea = document.getElementById('messages')
-        messageArea.scrollTop = messageArea.scrollHeight
+        this.messageArea.scrollTop = this.messageArea.scrollHeight
       })
     }
   },
 
   methods: {
+    handleHistoryScroll: debounce(function (event) {
+      if (this.historyLoaded) {
+        return
+      }
+
+      const scrollAmount = this.messageArea.scrollTop
+
+      if (scrollAmount < 500) {
+        this.loadMoreHistory()
+      }
+    }, 500),
+
     joinChannel (key) {
       return joinChannel(key)
     },
 
     formatMessage (str) {
       return emojifyString(markdownifyString(str))
+    },
+
+    loadMoreHistory () {
+      const start = this.historyPoint
+      const end = start + this.historyIncrement
+
+      loadHistory(this.key, start, end)
+        .then(res => {
+          this.addMessagesToHistory(res.data.messages)
+        })
+        .catch(e => {
+          console.log(e)
+        })
+    },
+
+    addMessagesToHistory (apiArray) {
+      const messagesAsObjects = stringArrayToJSON(apiArray)
+
+      const formattedMessages = messagesAsObjects.map(m => {
+        m.message = this.formatMessage(m.message)
+        m.type = 'user'
+
+        return m
+      })
+
+      this.messages = this.messages.concat(formattedMessages)
+
+      // No more messages in history to load
+      if (formattedMessages.length < 25) {
+        this.historyLoaded = true
+      }
+
+      this.historyPoint += formattedMessages.length
     },
 
     addMessage (message, user, date, type = 'message') {
@@ -124,18 +175,13 @@ export default {
     })
 
     this.messageBox = this.$el.querySelector('#messagebox')
+    this.messageArea = this.$el.querySelector('#messages')
+
     autosize(this.messageBox)
 
     this.joinChannel(key)
       .then((res) => {
-        const messagesAsObjects = stringArrayToJSON(res.data.messages)
-
-        this.messages = messagesAsObjects.map(m => {
-          m.message = this.formatMessage(m.message)
-          m.type = 'user'
-
-          return m
-        })
+        this.addMessagesToHistory(res.data.messages)
       })
       .catch(e => {
         console.log(e)
