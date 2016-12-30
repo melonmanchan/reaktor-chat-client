@@ -121,7 +121,6 @@ export default {
       const formatted = this.formatMessage(trimmed)
 
       this.messages.push({ type, message: formatted, date, user })
-      this.scrollMessageBoxToBottom()
     },
 
     resizeTextArea () {
@@ -149,6 +148,7 @@ export default {
       this.resizeTextArea()
       this.addMessage(this.newMessage, { username: 'You' }, new Date())
       this.newMessage = ''
+      this.scrollMessageBoxToBottom()
 
       return false
     }
