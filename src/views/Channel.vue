@@ -6,7 +6,7 @@
             <div class="message-wrapper" v-bind:class="m.type">
               <div class="message-info">
                 <span class="username">{{m.user.username || m.user}}</span>
-                <span class="timestamp">{{ m.date | moment("from") }}</span>
+                <span class="timestamp" :title="m.date | moment('HH:MM:SS DD/MM/YYYY')">{{ m.date | moment("from") }}</span>
               </div>
               <div class="message-content" v-html="m.message"></div>
             </div>
