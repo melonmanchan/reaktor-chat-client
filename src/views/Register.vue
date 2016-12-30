@@ -42,10 +42,17 @@ export default {
 
   watch: {
     username (val) {
-      if (val.length > 3 && this.usernameError) {
+      const possibleError = this.isNameValid(val)
+
+      if (possibleError) {
+        this.usernameError = true
+        this.errorMessage = possibleError
+      } else {
         this.usernameError = false
+        this.errorMessage = null
       }
     },
+
     password (val) {
       if (val === this.passwordAgain) {
         this.errorMessage = null
@@ -66,6 +73,20 @@ export default {
   },
 
   methods: {
+    isNameValid (name) {
+      let error = null
+
+      if (name.length < 3) {
+        error = 'Name is too short (minimum 3 characters)'
+      } else if (name === 'You' || name === 'System') {
+        error = 'That name is not allowed'
+      } else if (!name.match(/^[A-Za-z0-9]+$/)) {
+        error = 'Name must be numbers or letters A-Z only'
+      }
+
+      return error
+    },
+
     debouncedPasswordMatch: debounce(function () {
       if (this.password !== this.passwordAgain) {
         this.errorMessage = 'Passwords do not match'
@@ -90,8 +111,10 @@ export default {
         return
       }
 
-      if (this.username.length < 3) {
-        this.errorMessage = 'Username too short (minimum of 3 characters)'
+      const possibleNameError = this.isNameValid(this.username)
+
+      if (possibleNameError) {
+        this.errorMessage = possibleNameError
         this.usernameError = true
         return
       }
