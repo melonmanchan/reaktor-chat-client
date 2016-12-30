@@ -5,7 +5,7 @@
           <div class="pure-u-7-8 message-area" v-for="m in messages">
             <div class="message-wrapper" v-bind:class="m.type">
               <div class="message-info">
-                <span class="username">{{m.user.username}}</span>
+                <span class="username">{{m.user.username || m.user}}</span>
                 <span class="timestamp">{{ m.date | moment("from") }}</span>
               </div>
               <div class="message-content" v-html="m.message"></div>
@@ -24,11 +24,10 @@
 
 <script>
 import autosize from 'autosize'
-import marked   from 'marked'
-import emojione from 'emojione'
 
 import events from '../socketio/events'
 import { joinChannel } from '../api/channels'
+import { stringArrayToJSON, markdownifyString, emojifyString } from '../utils'
 
 export default {
   data () {
@@ -54,11 +53,15 @@ export default {
       return joinChannel(key)
     },
 
+    formatMessage (str) {
+      return emojifyString(markdownifyString(str))
+    },
+
     addMessage (message, user, date, type = 'message') {
       const trimmed = message.replace(/^\s+|\s+$/g, '')
-      const withEmojis = emojione.toImage(trimmed)
-      const asMarkdown = marked(withEmojis)
-      this.messages.push({ type, message: asMarkdown, date, user })
+      const formatted = this.formatMessage(trimmed)
+
+      this.messages.push({ type, message: formatted, date, user })
     },
 
     resizeTextArea () {
@@ -125,7 +128,14 @@ export default {
 
     this.joinChannel(key)
       .then((res) => {
-        console.log(res.data)
+        const messagesAsObjects = stringArrayToJSON(res.data.messages)
+
+        this.messages = messagesAsObjects.map(m => {
+          m.message = this.formatMessage(m.message)
+          m.type = 'user'
+
+          return m
+        })
       })
       .catch(e => {
         console.log(e)
