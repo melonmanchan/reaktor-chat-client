@@ -9,6 +9,10 @@ export default {
   name: 'app',
   data () {
     return {}
+  },
+
+  mounted () {
+    document.getElementById('preload').classList = 'hidden'
   }
 }
 </script>
