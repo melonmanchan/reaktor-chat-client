@@ -76,6 +76,7 @@ export default {
     },
 
     usersRefresh (users) {
+      users.sort()
       this.users = users
     },
 

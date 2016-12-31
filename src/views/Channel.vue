@@ -291,7 +291,7 @@ export default {
       .then((res) => {
         this.addMessagesToHistory(res.data.messages)
         this.scrollMessageBoxToBottom()
-        this.$bus.emit('users-refresh', res.data.onlineUsers)
+        this.$bus.emit('users:refresh', res.data.onlineUsers)
       })
       .catch(e => {
         console.log(e)
