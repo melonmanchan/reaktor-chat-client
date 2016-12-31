@@ -37,18 +37,34 @@ export default {
   created () {
     this.$bus.on('channel-refresh', this.channelRefresh)
     this.$bus.on('channel-add', this.channelAdd)
+
     this.$bus.on('users-refresh', this.usersRefresh)
-    this.$bus.on('users-remove', this.removeUser)
+    this.$bus.on('users-leave', this.removeUser)
+    this.$bus.on('users-join', this.addUser)
   },
 
   beforeDestroy () {
     this.$bus.off('channel-refresh', this.channelRefresh)
     this.$bus.off('channel-add', this.channelAdd)
+
     this.$bus.off('users-refresh', this.usersRefresh)
-    this.$bus.off('users-remove', this.removeUser)
+    this.$bus.off('users-leave', this.removeUser)
+    this.$bus.off('users-join', this.addUser)
   },
 
   methods: {
+    sortUsers () {
+      this.users.sort((a, b) => {
+        if (a.username < b.username) {
+          return -1
+        } else if (a.username > b.username) {
+          return 1
+        }
+
+        return 0
+      })
+    },
+
     channelRefresh (channels) {
       this.channels = channels
     },
@@ -61,16 +77,22 @@ export default {
       this.users = users
     },
 
+    addUser (user) {
+      this.users.push(user)
+      this.sortUsers()
+    },
+
     removeUser (user) {
-      const userToRemove = this.users.find((u) => {
+      const userToRemove = this.users.findIndex((u) => {
         return u.username === user.username
       })
 
-      if (!userToRemove) {
+      if (userToRemove === -1) {
         return
       }
 
-      this.users.splice(this.users.indexOf(userToRemove), 1)
+      this.users.splice(userToRemove, 1)
+      this.sortUsers()
     },
 
     toggleMenu (e) {

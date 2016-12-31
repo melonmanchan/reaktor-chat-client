@@ -158,7 +158,12 @@ export default {
     },
 
     broadcastUserLeft (user) {
-      this.$bus.emit('users-remove', user)
+      this.$bus.emit('users-leave', user)
+    },
+
+    broadcastUserJoined (user) {
+      user.status = 'online'
+      this.$bus.emit('users-join', user)
     },
 
     sendMessage (e) {
@@ -212,6 +217,7 @@ export default {
       const message = `User ${user.username} joined the channel...`
 
       this.addMessage(message, { username: 'System' }, new Date(), 'system')
+      this.broadcastUserJoined(user)
     })
 
     window._socket.on(events.USER_QUIT, (user) => {
