@@ -1,7 +1,6 @@
 <template>
-  <div id="layout">
+  <div id="layout" v-bind:class="{ 'menu-hidden': isMenuHidden }">
     <side-menu></side-menu>
-
     <div id="content">
       <router-view></router-view>
     </div>
@@ -14,7 +13,9 @@ import Menu from '../components/Menu.vue'
 export default {
   name: 'app',
   data () {
-    return {}
+    return {
+      isMenuHidden: false
+    }
   },
 
   mounted () {
@@ -40,16 +41,6 @@ body {
     left: 0;
     padding-left: 150;
 }
-
-#layout.active #menu {
-    left: 150px;
-    width: 150px;
-}
-
-#layout.active .menu-link {
-    left: 150px;
-}
-
 #content {
   right: 0;
   margin-left: 150px;
@@ -57,6 +48,16 @@ body {
 }
 
 @media(max-width: 600px) {
+  #content {
+    margin-left: 0;
+  }
+}
+
+#layout.menu-hidden {
+  #menu {
+    display: none;
+  }
+
   #content {
     margin-left: 0;
   }
