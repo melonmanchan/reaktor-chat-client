@@ -12,6 +12,7 @@ import Menu from '../components/Menu.vue'
 
 export default {
   name: 'app',
+
   data () {
     return { }
   },
@@ -21,6 +22,7 @@ export default {
       return (this.$route.path === '/login' || this.$route.path === '/register')
     }
   },
+
   mounted () {
     document.getElementById('preload').classList = 'hidden'
   },

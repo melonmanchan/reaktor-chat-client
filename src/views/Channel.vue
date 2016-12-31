@@ -35,6 +35,8 @@ export default {
   data () {
     return {
       messages: [],
+      onlineUsers: [],
+
       newMessage: '',
       messageBox: null,
       messageArea: null,
@@ -129,7 +131,8 @@ export default {
         this.enableTitleNotify()
       }
 
-      // Check whether or not user is scrolling the history. If not, scroll the message area down
+      // Check whether or not user is scrolling the history.
+      // If not, scroll the message area down
       if (Math.abs(this.messageArea.scrollTop - this.messageArea.scrollHeight) < 2000) {
         this.scrollMessageBoxToBottom()
       }
@@ -227,8 +230,11 @@ export default {
 
     this.joinChannel(key)
       .then((res) => {
+        this.onlineUsers = res.data.onlineUsers
         this.addMessagesToHistory(res.data.messages)
         this.scrollMessageBoxToBottom()
+
+        this.$bus.emit('users-refresh', this.onlineUsers)
       })
       .catch(e => {
         console.log(e)

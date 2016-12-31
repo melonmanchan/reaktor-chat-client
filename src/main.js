@@ -1,6 +1,8 @@
 import Vue       from 'vue'
 import VueRouter from 'vue-router'
 import VueMoment from 'vue-moment'
+import VueBus    from 'vue-bus'
+
 import Promise   from 'bluebird'
 
 import Storage                   from './localstorage'
@@ -13,6 +15,7 @@ import Channels from './views/Channels'
 import Login    from './views/Login'
 import Register from './views/Register'
 
+Vue.use(VueBus)
 Vue.use(VueRouter)
 Vue.use(VueMoment)
 

@@ -4,12 +4,21 @@
       <span></span>
     </a>
     <div id="menu" class="pure-menu" v-bind:class="{active: isResponsiveMenuActive}" >
-      <span class="pure-menu-heading">Channels</span>
+      <span class="pure-menu-heading div-bottom">Channels</span>
       <ul class="pure-menu-list">
-        <li class="pure-menu-item"><router-link class="pure-menu-link" :to="{ name: 'channel', params: { id: 'channel1', name: 'Channel 1'}}">Channel 1</router-link></li>
-        <li class="pure-menu-item"><router-link class="pure-menu-link" :to="{ name: 'channel', params: { id: 'channel2', name: 'Channel 2'}}">Channel 2</router-link></li>
-        <li class="pure-menu-item"><router-link class="pure-menu-link" :to="{ name: 'channel', params: { id: 'channel3', name: 'Channel 3'}}">Channel 3</router-link></li>
+        <router-link :to="{ name: 'channels'}" class="pure-menu-link menu-item-divided">Lobby</router-link>
+        <li class="pure-menu-item" v-for="c in channels">
+          <router-link class="pure-menu-link" :to="{ name: 'channel', params: { id: c.key, name: c.name}}">{{c.name}}</router-link>
+        </li>
       </ul>
+      <div v-if="shouldShowUsers">
+        <span class="pure-menu-heading div-top div-bottom">Users</span>
+        <ul>
+          <li class="pure-menu-item" v-for="u in users">
+            {{u.username}}
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -18,15 +27,48 @@
 export default {
   data () {
     return {
-      isResponsiveMenuActive: false
+      isResponsiveMenuActive: false,
+      channels: [],
+      users: []
     }
   },
+
+  created () {
+    this.$bus.on('channel-refresh', this.channelRefresh)
+    this.$bus.on('channel-add', this.channelAdd)
+    this.$bus.on('users-refresh', this.usersRefresh)
+  },
+
+  beforeDestroy () {
+    this.$bus.off('channel-refresh', this.channelRefresh)
+    this.$bus.off('channel-add', this.channelAdd)
+    this.$bus.off('users-refresh', this.usersRefresh)
+  },
+
   methods: {
+    channelRefresh (channels) {
+      this.channels = channels
+    },
+
+    channelAdd (channels) {
+
+    },
+
+    usersRefresh (users) {
+      this.users = users
+      console.log(users)
+    },
+
     toggleMenu (e) {
       e.preventDefault()
       this.isResponsiveMenuActive = !this.isResponsiveMenuActive
-      console.log(this.isResponsiveMenuActive)
       return false
+    }
+  },
+
+  computed: {
+    shouldShowUsers () {
+      return this.$route.name === 'channel'
     }
   }
 }
@@ -81,6 +123,14 @@ export default {
   position: absolute;
   margin-top: -0.6em;
   content: " ";
+}
+
+.div-bottom {
+  border-bottom: 1px solid #333;
+}
+
+.div-top {
+  border-top: 1px solid #333;
 }
 
 .menu-link span:after {

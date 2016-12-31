@@ -39,6 +39,7 @@ export default {
       getChannels()
         .then(resp => {
           this.channels = resp.data.channels
+          this.$bus.emit('channel-refresh', this.channels)
         })
         .catch(e => {
           console.log(e)
