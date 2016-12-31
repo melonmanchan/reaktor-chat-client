@@ -1,5 +1,5 @@
 <template>
-  <div id="layout" v-bind:class="{ 'menu-hidden': ($route.path === '/login' || $route.path === '/register') }">
+  <div id="layout" v-bind:class="{ 'menu-hidden': shouldHideSideMenu }">
     <side-menu></side-menu>
     <div id="content">
       <router-view></router-view>
@@ -16,6 +16,11 @@ export default {
     return { }
   },
 
+  computed: {
+    shouldHideSideMenu () {
+      return (this.$route.path === '/login' || this.$route.path === '/register')
+    }
+  },
   mounted () {
     document.getElementById('preload').classList = 'hidden'
   },
