@@ -2,7 +2,7 @@
   <div id="layout" v-bind:class="{ 'menu-hidden': shouldHideSideMenu }">
     <side-menu></side-menu>
     <div id="content">
-      <router-view></router-view>
+      <router-view :key="$route.path"></router-view>
     </div>
   </div>
 </template>
