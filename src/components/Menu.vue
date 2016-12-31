@@ -33,5 +33,11 @@ export default {
     overflow-y: auto;
 }
 
+
+@media(max-width: 600px) {
+  .pure-menu {
+    display: none;
+  }
+}
 </style>
 

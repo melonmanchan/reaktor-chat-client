@@ -56,4 +56,9 @@ body {
   height: 100%;
 }
 
+@media(max-width: 600px) {
+  #content {
+    margin-left: 0;
+  }
+}
 </style>
