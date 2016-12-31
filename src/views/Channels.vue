@@ -1,8 +1,10 @@
 <template>
+  <div>
+  <side-menu></side-menu>
   <div class="rooms-view">
     <div class="pure-g">
       <div class="pure-u-1">
-        <h1>Pick a channel</h1>
+        <h1>Join a channel</h1>
       </div>
 
       <div class="channels pure-u-1">
@@ -15,9 +17,11 @@
       </div>
     </div>
   </div>
+  </div>
 </template>
 
 <script>
+import Menu from '../components/Menu.vue'
 import { getChannels } from '../api/channels'
 
 export default {
@@ -45,6 +49,9 @@ export default {
     join (channel) {
       this.$router.push({ name: 'channel', params: { id: channel.key, name: channel.name } })
     }
+  },
+  components: {
+    'side-menu': Menu
   }
 }
 </script>
@@ -55,6 +62,7 @@ export default {
   justify-content: center;
   align-items: center;
   height: 100vh;
+  width: 100%;
 
   h1 {
     text-align: center;

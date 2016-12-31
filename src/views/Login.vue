@@ -82,10 +82,11 @@ export default {
 
 <style lang="scss" scoped>
 .login-form {
+  width: 100%;
+  height: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
 
   button {
     margin-top: 10px;
