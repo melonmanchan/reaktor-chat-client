@@ -4,8 +4,8 @@
       <fieldset>
         <legend>Welcome to the chat</legend>
         <div v-if="errorMessage" class="error-message">{{errorMessage}}</div>
-        <input v-bind:class="{error: errorMessage }" v-model="username" id="name" type="text" placeholder="Username" required>
-        <input v-bind:class="{error: errorMessage }" v-model="password" id="password" type="password" placeholder="Password" required>
+        <input v-bind:class="{ error: errorMessage }" v-model="username" id="name" type="text" placeholder="Username" required>
+        <input v-bind:class="{ error: errorMessage }" v-model="password" id="password" type="password" placeholder="Password" required>
         <div class="pure-controls">
           <button :disabled="joinDisabled" v-on:click="join" type="submit" class="pure-button pure-button-primary">Join</button>
         </div>

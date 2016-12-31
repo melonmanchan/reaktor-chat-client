@@ -242,13 +242,12 @@ export default {
 .channel-view-wrapper {
   display: flex;
   justify-content: center;
-  height: 100vh;
-  width: 100vw;
 }
 
 .channel-view {
-  height: 90vh;
-  width: 95vw;
+  margin-top: 10px;
+  height: 90%;
+  width: 95%;
 
   .messages {
     overflow-y: auto;
@@ -256,7 +255,7 @@ export default {
   }
 
   #messagebox {
-    position: absolute;
+    position: static;
     bottom: 20px;
     width: 90%;
   }
