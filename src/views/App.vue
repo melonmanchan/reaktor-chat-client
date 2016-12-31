@@ -1,5 +1,5 @@
 <template>
-  <div id="layout" v-bind:class="{ 'menu-hidden': isMenuHidden }">
+  <div id="layout" v-bind:class="{ 'menu-hidden': ($route.path === '/login' || $route.path === '/register') }">
     <side-menu></side-menu>
     <div id="content">
       <router-view></router-view>
@@ -13,12 +13,11 @@ import Menu from '../components/Menu.vue'
 export default {
   name: 'app',
   data () {
-    return {
-      isMenuHidden: false
-    }
+    return { }
   },
 
   mounted () {
+    console.log(this.$route.path)
     document.getElementById('preload').classList = 'hidden'
   },
 
@@ -39,8 +38,8 @@ body {
     width: 100vw;
     position: relative;
     left: 0;
-    padding-left: 150;
 }
+
 #content {
   right: 0;
   margin-left: 150px;
@@ -54,7 +53,7 @@ body {
 }
 
 #layout.menu-hidden {
-  #menu {
+  #menu, .menu-link {
     display: none;
   }
 
