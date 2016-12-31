@@ -30,6 +30,8 @@ const router = new VueRouter({
 // Redirect to login if socket not connected
 router.beforeEach((to, from, next) => {
   document.title = to.meta.title
+
+  const matchesAnyRoute = (router.match(to.fullPath).matched.length > 0)
   const isConnected = (window._socket && window._socket.connected)
   const goingToNonAuthView = (to.fullPath === '/login' || to.fullPath === '/register')
 
@@ -39,6 +41,10 @@ router.beforeEach((to, from, next) => {
 
   if (!isConnected) {
     return next('login')
+  }
+
+  if (isConnected && !matchesAnyRoute) {
+    return next('channels')
   }
 
   next()
