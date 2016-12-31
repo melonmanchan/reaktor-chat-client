@@ -35,7 +35,6 @@ export default {
   data () {
     return {
       messages: [],
-      onlineUsers: [],
 
       newMessage: '',
       messageBox: null,
@@ -158,6 +157,10 @@ export default {
       }, 0)
     },
 
+    broadcastUserLeft (user) {
+      this.$bus.emit('users-remove', user)
+    },
+
     sendMessage (e) {
       if (e.shiftKey && e.code === 'Enter') {
         return
@@ -187,6 +190,7 @@ export default {
 
     window._socket.off(events.USER_JOINED)
     window._socket.off(events.USER_LEFT)
+    window._socket.off(events.USER_QUIT)
     window._socket.off(events.MESSAGE_POST)
   },
 
@@ -214,12 +218,14 @@ export default {
       const message = `User ${user.username} quit...`
 
       this.addMessage(message, { username: 'System' }, new Date(), 'system')
+      this.broadcastUserLeft(user)
     })
 
     window._socket.on(events.USER_LEFT, (data) => {
       const message = `User ${data.user} left the channel...`
 
       this.addMessage(message, { username: 'System' }, new Date(), 'system')
+      this.broadcastUserLeft({ username: data.user })
     })
 
     window._socket.on(events.MESSAGE_POST, (data) => {
@@ -230,11 +236,9 @@ export default {
 
     this.joinChannel(key)
       .then((res) => {
-        this.onlineUsers = res.data.onlineUsers
         this.addMessagesToHistory(res.data.messages)
         this.scrollMessageBoxToBottom()
-
-        this.$bus.emit('users-refresh', this.onlineUsers)
+        this.$bus.emit('users-refresh', res.data.onlineUsers)
       })
       .catch(e => {
         console.log(e)

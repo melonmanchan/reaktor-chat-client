@@ -38,12 +38,14 @@ export default {
     this.$bus.on('channel-refresh', this.channelRefresh)
     this.$bus.on('channel-add', this.channelAdd)
     this.$bus.on('users-refresh', this.usersRefresh)
+    this.$bus.on('users-remove', this.removeUser)
   },
 
   beforeDestroy () {
     this.$bus.off('channel-refresh', this.channelRefresh)
     this.$bus.off('channel-add', this.channelAdd)
     this.$bus.off('users-refresh', this.usersRefresh)
+    this.$bus.off('users-remove', this.removeUser)
   },
 
   methods: {
@@ -57,7 +59,18 @@ export default {
 
     usersRefresh (users) {
       this.users = users
-      console.log(users)
+    },
+
+    removeUser (user) {
+      const userToRemove = this.users.find((u) => {
+        return u.username === user.username
+      })
+
+      if (!userToRemove) {
+        return
+      }
+
+      this.users.splice(this.users.indexOf(userToRemove), 1)
     },
 
     toggleMenu (e) {
