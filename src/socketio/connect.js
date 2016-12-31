@@ -8,16 +8,19 @@ function connectSocket (token) {
 
     window._socket.once(events.LOGGED_IN, () => {
       resolve()
+
+      window._socket.off(events.NAME_TAKEN)
+      window._socket.off(events.CONNECT_ERROR)
     })
 
     window._socket.once(events.NAME_TAKEN, () => {
       window._socket.disconnect()
-      reject({ message: 'That username is taken!' })
+      reject(new Error('That name is already taken'))
     })
 
     window._socket.once(events.CONNECT_ERROR, () => {
       window._socket.disconnect()
-      reject({ message: 'Something went wrong.' })
+      reject(new Error('Error connecting to server'))
     })
   })
 }
