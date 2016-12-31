@@ -27,6 +27,7 @@ import autosize from 'autosize'
 import debounce from 'lodash.debounce'
 
 import events from '../socketio/events'
+import Storage from '../localstorage'
 import { sendNotification } from '../notifications'
 import { joinChannel, loadHistory } from '../api/channels'
 import { stringArrayToJSON, markdownifyString, emojifyString } from '../utils'
@@ -42,6 +43,7 @@ export default {
 
       key: null,
       name: null,
+      currentUser: {},
 
       historyLoaded: false,
       historyPoint: 0,
@@ -157,13 +159,17 @@ export default {
       }, 0)
     },
 
+    broadcastStatusChange (user, status) {
+      this.$bus.emit('users:status_changed', { user, status })
+    },
+
     broadcastUserLeft (user) {
-      this.$bus.emit('users-leave', user)
+      this.$bus.emit('users:leave', user)
     },
 
     broadcastUserJoined (user) {
       user.status = 'online'
-      this.$bus.emit('users-join', user)
+      this.$bus.emit('users:join', user)
     },
 
     sendMessage (e) {
@@ -191,12 +197,13 @@ export default {
 
   beforeDestroy () {
     delete window.onfocus
-    window._socket.emit(events.USER_LEFT, { channel: this.key })
-
     window._socket.off(events.USER_JOINED)
     window._socket.off(events.USER_LEFT)
     window._socket.off(events.USER_QUIT)
     window._socket.off(events.MESSAGE_POST)
+    window._socket.emit(events.USER_LEFT, { channel: this.key })
+
+    this.broadcastUserLeft(this.currentUser)
   },
 
   mounted () {
@@ -207,6 +214,7 @@ export default {
 
     this.key = key
     this.name = name
+    this.currentUser = Storage.getLoggedInUser()
 
     this.messageBox = this.$el.querySelector('#messagebox')
     this.messageArea = this.$el.querySelector('#messages')

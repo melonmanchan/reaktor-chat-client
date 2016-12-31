@@ -35,21 +35,23 @@ export default {
   },
 
   created () {
-    this.$bus.on('channel-refresh', this.channelRefresh)
-    this.$bus.on('channel-add', this.channelAdd)
+    this.$bus.on('channel:refresh', this.channelRefresh)
+    this.$bus.on('channel:add', this.channelAdd)
 
-    this.$bus.on('users-refresh', this.usersRefresh)
-    this.$bus.on('users-leave', this.removeUser)
-    this.$bus.on('users-join', this.addUser)
+    this.$bus.on('users:refresh', this.usersRefresh)
+    this.$bus.on('users:leave', this.removeUser)
+    this.$bus.on('users:join', this.addUser)
+    this.$bus.on('users:status_changed', this.changeUserStatus)
   },
 
   beforeDestroy () {
-    this.$bus.off('channel-refresh', this.channelRefresh)
-    this.$bus.off('channel-add', this.channelAdd)
+    this.$bus.off('channel:refresh', this.channelRefresh)
+    this.$bus.off('channel:add', this.channelAdd)
 
-    this.$bus.off('users-refresh', this.usersRefresh)
-    this.$bus.off('users-leave', this.removeUser)
-    this.$bus.off('users-join', this.addUser)
+    this.$bus.off('users:refresh', this.usersRefresh)
+    this.$bus.off('users:leave', this.removeUser)
+    this.$bus.off('users:join', this.addUser)
+    this.$bus.off('users:status_changed', this.changeUserStatus)
   },
 
   methods: {
@@ -93,6 +95,14 @@ export default {
 
       this.users.splice(userToRemove, 1)
       this.sortUsers()
+    },
+
+    changeUserStatus ({user, status}) {
+      const index = this.users.findIndex((u) => {
+        return u.username === user.username
+      })
+
+      this.users[index].status = status
     },
 
     toggleMenu (e) {
