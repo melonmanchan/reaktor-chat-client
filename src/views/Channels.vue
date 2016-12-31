@@ -7,7 +7,10 @@
 
       <div class="channels pure-u-1">
         <div class="pure-u-7-8 channel" v-for="channel in channels" v-on:click="join(channel)">
-          <p>{{channel.name}}</p>
+          <p>
+            <span class="channel-name">{{channel.name}}</span>
+            <span class="channel-online">{{channel.onlineCount}} user{{channel.onlineCount === 1 ? '' : 's'}} online</span>
+          </p>
         </div>
       </div>
     </div>
@@ -65,6 +68,12 @@ export default {
     flex-direction: column;
 
     .channel {
+      .channel-online {
+        opacity: 0.6;
+        float: right;
+        font-size: 0.8em;
+      }
+
       padding: 5px;
       margin-bottom: 5px;
       border: 1px solid #e5e5e5;
