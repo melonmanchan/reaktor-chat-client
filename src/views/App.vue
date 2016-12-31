@@ -46,7 +46,7 @@ body {
 
 #content {
   right: 0;
-  margin-left: 150px;
+  margin-left: 170px;
   height: 100%;
 }
 

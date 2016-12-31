@@ -4,16 +4,11 @@
       <span></span>
     </a>
     <div id="menu" class="pure-menu" v-bind:class="{active: isResponsiveMenuActive}" >
-      <span class="pure-menu-heading">Yahoo Sites</span>
+      <span class="pure-menu-heading">Channels</span>
       <ul class="pure-menu-list">
-        <li class="pure-menu-item"><a href="#" class="pure-menu-link">Flickr</a></li>
-        <li class="pure-menu-item"><a href="#" class="pure-menu-link">Messenger</a></li>
-        <li class="pure-menu-item"><a href="#" class="pure-menu-link">Sports</a></li>
-        <li class="pure-menu-item"><a href="#" class="pure-menu-link">Finance</a></li>
-        <li class="pure-menu-heading">More Sites</li>
-        <li class="pure-menu-item"><a href="#" class="pure-menu-link">Games</a></li>
-        <li class="pure-menu-item"><a href="#" class="pure-menu-link">News</a></li>
-        <li class="pure-menu-item"><a href="#" class="pure-menu-link">OMG!</a></li>
+        <li class="pure-menu-item"><router-link class="pure-menu-link" :to="{ name: 'channel', params: { id: 'channel1', name: 'Channel 1'}}">Channel 1</router-link></li>
+        <li class="pure-menu-item"><router-link class="pure-menu-link" :to="{ name: 'channel', params: { id: 'channel2', name: 'Channel 2'}}">Channel 2</router-link></li>
+        <li class="pure-menu-item"><router-link class="pure-menu-link" :to="{ name: 'channel', params: { id: 'channel3', name: 'Channel 3'}}">Channel 3</router-link></li>
       </ul>
     </div>
   </div>
@@ -39,9 +34,10 @@ export default {
 
 <style lang="scss">
 .pure-menu {
+  line-height: 1.7;
   background: #191818;
   position: fixed;
-  width: 150px;
+  width: 170px;
   top: 0;
   left: 0;
   bottom: 0;
@@ -92,7 +88,7 @@ export default {
 }
 
 .menu-link.active {
-  left: 150px;
+  left: 170px;
 }
 
 @media(max-width: 600px) {
