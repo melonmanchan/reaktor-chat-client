@@ -10,6 +10,7 @@ export default {
   // User-related events
   USER_JOINED   : 'user:joined',
   USER_QUIT     : 'user:quit',
+  USER_LEFT     : 'user:left',
 
   // Messaging stuff
   MESSAGE_POST  : 'message:post'

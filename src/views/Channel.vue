@@ -175,6 +175,8 @@ export default {
 
   beforeDestroy () {
     delete window.onfocus
+    window._socket.emit(events.USER_LEFT, { channel: this.key })
+
     window._socket.off(events.USER_JOINED)
     window._socket.off(events.USER_LEFT)
     window._socket.off(events.MESSAGE_POST)
