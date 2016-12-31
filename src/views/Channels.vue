@@ -1,6 +1,5 @@
 <template>
   <div>
-  <side-menu></side-menu>
   <div class="rooms-view">
     <div class="pure-g">
       <div class="pure-u-1">
@@ -21,7 +20,6 @@
 </template>
 
 <script>
-import Menu from '../components/Menu.vue'
 import { getChannels } from '../api/channels'
 
 export default {
@@ -49,9 +47,6 @@ export default {
     join (channel) {
       this.$router.push({ name: 'channel', params: { id: channel.key, name: channel.name } })
     }
-  },
-  components: {
-    'side-menu': Menu
   }
 }
 </script>

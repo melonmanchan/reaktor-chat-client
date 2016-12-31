@@ -39,7 +39,6 @@ export default {
 
 <style lang="scss">
 .pure-menu {
-  transition: all 0.2s ease-out;
   background: #191818;
   position: fixed;
   width: 150px;
@@ -50,7 +49,6 @@ export default {
 }
 
 .menu-link {
-  transition: all 0.2s ease-out;
   position: fixed;
   display: block; /* show this only on small screens */
   top: 0;
