@@ -125,6 +125,7 @@ export default {
       register(this.username, this.password)
         .then(res => {
           Storage.saveAuthInfo(res.data)
+          Storage.saveLoggedInUser({ username: this.username })
           const token = res.data.token
           setAuthorizationToken(token)
           return connectSocket(token)

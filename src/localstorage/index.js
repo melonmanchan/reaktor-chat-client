@@ -5,7 +5,7 @@ const Storage = {
     window.localStorage.setItem(PREFIX + 'user', JSON.stringify(user))
   },
 
-  getLoggedInUser (user) {
+  getLoggedInUser () {
     return JSON.parse(window.localStorage.getItem(PREFIX + 'user'))
   },
 
