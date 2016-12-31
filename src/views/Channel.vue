@@ -208,6 +208,12 @@ export default {
       this.addMessage(message, { username: 'System' }, new Date(), 'system')
     })
 
+    window._socket.on(events.USER_LEFT, (data) => {
+      const message = `User ${data.user} left the channel...`
+
+      this.addMessage(message, { username: 'System' }, new Date(), 'system')
+    })
+
     window._socket.on(events.MESSAGE_POST, (data) => {
       this.addMessage(data.message, data.user, data.date)
     })
