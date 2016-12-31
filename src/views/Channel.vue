@@ -128,6 +128,11 @@ export default {
         sendNotification(`${this.name} | ${user.username}`, message)
         this.enableTitleNotify()
       }
+
+      // Check whether or not user is scrolling the history. If not, scroll the message area down
+      if (Math.abs(this.messageArea.scrollTop - this.messageArea.scrollHeight) < 2000) {
+        this.scrollMessageBoxToBottom()
+      }
     },
 
     enableTitleNotify () {
@@ -197,7 +202,7 @@ export default {
     window.onfocus = () => { this.disableTitleNotify() }
 
     window._socket.on(events.USER_JOINED, (user) => {
-      const message = `User ${user.username} joined...`
+      const message = `User ${user.username} joined the channel...`
 
       this.addMessage(message, { username: 'System' }, new Date(), 'system')
     })
