@@ -4,6 +4,15 @@
       <span></span>
     </a>
     <div id="menu" class="pure-menu" v-bind:class="{active: isResponsiveMenuActive}" >
+      <div v-if="shouldShowUsers">
+        <span class="pure-menu-heading div-top div-bottom">Users</span>
+        <ul class="pure-menu-list users-list">
+          <li class="pure-menu-item user" v-for="u in users">
+            <span class="username">{{u.username}}</span>
+            <span class="status-indicator" v-bind:class="u.status"></span>
+          </li>
+        </ul>
+      </div>
       <span class="pure-menu-heading div-bottom">Channels</span>
       <ul class="pure-menu-list">
         <router-link :to="{ name: 'channels'}" class="pure-menu-link menu-item-divided">Lobby</router-link>
@@ -11,14 +20,6 @@
           <router-link class="pure-menu-link" :to="{ name: 'channel', params: { id: c.key, name: c.name}}">{{c.name}}</router-link>
         </li>
       </ul>
-      <div v-if="shouldShowUsers">
-        <span class="pure-menu-heading div-top div-bottom">Users</span>
-        <ul>
-          <li class="pure-menu-item" v-for="u in users">
-            {{u.username}}
-          </li>
-        </ul>
-      </div>
     </div>
   </div>
 </template>
@@ -150,6 +151,32 @@ export default {
 @media(min-width: 600px) {
   .menu-link {
     display: none;
+  }
+}
+
+.users-list {
+  .user {
+    padding: .5em 1em;
+    color: #fdfdfd;
+  }
+
+  .status-indicator {
+    position: absolute;
+    right: 26px;
+    top: 16px;
+
+    border-radius: 50%;
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+
+    &.online {
+      background-color: #5eb95e;
+    }
+
+    &.away {
+      background-color: rgb(250, 210, 50);
+    }
   }
 }
 </style>
