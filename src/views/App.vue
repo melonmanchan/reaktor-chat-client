@@ -17,7 +17,6 @@ export default {
   },
 
   mounted () {
-    console.log(this.$route.path)
     document.getElementById('preload').classList = 'hidden'
   },
 
