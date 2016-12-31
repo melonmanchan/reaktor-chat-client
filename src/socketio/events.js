@@ -8,9 +8,10 @@ export default {
   LOGGED_IN     : 'logged_in',
 
   // User-related events
-  USER_JOINED   : 'user:joined',
-  USER_QUIT     : 'user:quit',
-  USER_LEFT     : 'user:left',
+  USER_JOINED        : 'user : joined',
+  USER_QUIT          : 'user : quit',
+  USER_LEFT          : 'user : left',
+  USER_STATUS_CHANGE : 'user : status_changed',
 
   // Messaging stuff
   MESSAGE_POST  : 'message:post'

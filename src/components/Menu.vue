@@ -97,10 +97,14 @@ export default {
       this.sortUsers()
     },
 
-    changeUserStatus ({user, status}) {
+    changeUserStatus ({username, status}) {
       const index = this.users.findIndex((u) => {
-        return u.username === user.username
+        return u.username === username
       })
+
+      if (index === -1) {
+        return
+      }
 
       this.users[index].status = status
     },

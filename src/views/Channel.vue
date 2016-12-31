@@ -47,7 +47,9 @@ export default {
 
       historyLoaded: false,
       historyPoint: 0,
-      historyIncrement: 25
+      historyIncrement: 25,
+
+      setSelfAwayTimer: null
     }
   },
 
@@ -76,6 +78,16 @@ export default {
 
     formatMessage (str) {
       return emojifyString(markdownifyString(str))
+    },
+
+    startSelfAwayTimer () {
+      this.setSelfAwayTimer = window.setTimeout(() => {
+        this.setSelfAway()
+      }, 30000)
+    },
+
+    stopSelfAwayTimer () {
+      window.clearTimeout(this.setSelfAwayTimer)
     },
 
     loadMoreHistory () {
@@ -159,8 +171,8 @@ export default {
       }, 0)
     },
 
-    broadcastStatusChange (user, status) {
-      this.$bus.emit('users:status_changed', { user, status })
+    broadcastStatusChange (username, status) {
+      this.$bus.emit('users:status_changed', { username, status })
     },
 
     broadcastUserLeft (user) {
@@ -170,6 +182,14 @@ export default {
     broadcastUserJoined (user) {
       user.status = 'online'
       this.$bus.emit('users:join', user)
+    },
+
+    setSelfAway () {
+      window._socket.emit(events.USER_STATUS_CHANGE, { channel: this.key, status : 'away' })
+    },
+
+    setSelfOnline () {
+      window._socket.emit(events.USER_STATUS_CHANGE, { channel: this.key, status : 'online' })
     },
 
     sendMessage (e) {
@@ -197,10 +217,14 @@ export default {
 
   beforeDestroy () {
     delete window.onfocus
+    delete window.onblur
+
     window._socket.off(events.USER_JOINED)
     window._socket.off(events.USER_LEFT)
     window._socket.off(events.USER_QUIT)
     window._socket.off(events.MESSAGE_POST)
+    window._socket.off(events.USER_STATUS_CHANGE)
+
     window._socket.emit(events.USER_LEFT, { channel: this.key })
 
     this.broadcastUserLeft(this.currentUser)
@@ -219,7 +243,22 @@ export default {
     this.messageBox = this.$el.querySelector('#messagebox')
     this.messageArea = this.$el.querySelector('#messages')
 
-    window.onfocus = () => { this.disableTitleNotify() }
+    window.onfocus = () => {
+      this.disableTitleNotify()
+      this.stopSelfAwayTimer()
+      this.setSelfOnline()
+    }
+
+    window.onblur = () => {
+      this.startSelfAwayTimer()
+    }
+
+    window._socket.on(events.USER_STATUS_CHANGE, (data) => {
+      const username = data.user
+      const status = data.status
+
+      this.broadcastStatusChange(username, status)
+    })
 
     window._socket.on(events.USER_JOINED, (user) => {
       const message = `User ${user.username} joined the channel...`
