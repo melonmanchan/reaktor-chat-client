@@ -12,6 +12,8 @@ Live: https://reaktor-chat.surge.sh
 - Scalable [backend architecture](https://github.com/melonmanchan/reaktor-chat-server)
 - Markdown and emoji support!
 
+[![Screenshot](https://i.imgur.com/MBAFwRb.png)]
+
 ## Build Setup
 First off, install Yarn:
 
