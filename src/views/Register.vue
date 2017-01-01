@@ -27,6 +27,8 @@ import { register }              from '../api/auth'
 import { setAuthorizationToken } from '../api'
 
 export default {
+  name: 'register',
+
   data () {
     return {
       username: '',

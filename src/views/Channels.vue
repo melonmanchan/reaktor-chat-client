@@ -25,6 +25,8 @@ import { getChannels } from '../api/channels'
 import Storage from '../localstorage'
 
 export default {
+  name: 'channels',
+
   data () {
     return {
       channels: [],

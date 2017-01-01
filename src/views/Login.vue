@@ -27,6 +27,8 @@ import { requestPermission }     from '../notifications'
 import { setAuthorizationToken } from '../api'
 
 export default {
+  name: 'login',
+
   data () {
     return {
       username: '',

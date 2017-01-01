@@ -33,6 +33,8 @@ import { joinChannel, loadHistory } from '../api/channels'
 import { stringArrayToJSON, markdownifyString, emojifyString } from '../utils'
 
 export default {
+  name: 'channel',
+
   data () {
     return {
       messages: [],
