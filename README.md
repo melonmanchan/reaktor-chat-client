@@ -12,6 +12,9 @@ Live: https://reaktor-chat.surge.sh
 - Scalable [backend architecture](https://github.com/melonmanchan/reaktor-chat-server)
 - Markdown and emoji support!
 
+Once logged in, feel free to join any of the channels in the lobby, or create
+your own.
+
 [![Screenshot](https://i.imgur.com/MBAFwRb.png)]
 
 ## Build Setup
@@ -31,5 +34,6 @@ npm run dev
 # build for production with minification
 npm run build
 ```
+The local build assumes you have the backend running at localhost:8000
 
 [![Build Status](https://travis-ci.org/melonmanchan/reaktor-chat-client.svg?branch=master)](https://travis-ci.org/melonmanchan/reaktor-chat-client)

@@ -58,6 +58,14 @@ export default {
 .form-elements {
   display: flex;
   justify-content: space-between;
+
+  button {
+    width: 80px;
+  }
+
+  input {
+    width: 50%;
+  }
 }
 
 </style>

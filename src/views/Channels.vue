@@ -14,8 +14,13 @@
           </p>
         </div>
       </div>
-      <div class="pure-u-1 create-channel-form">
-        <create-channel-form></create-channel-form>
+      <div class="form-wrapper">
+        <div class="pure-u-1">
+          <create-channel-form></create-channel-form>
+        </div>
+        <div class="pure-u-1">
+          <random-channel-form></random-channel-form>
+        </div>
       </div>
     </div>
   </div>
@@ -26,7 +31,8 @@
 import { getChannels } from '../api/channels'
 import { ChannelStore }  from '../store'
 
-import CreateChannelForm from '../components/CreateChannelForm'
+import CreateChannelForm        from '../components/CreateChannelForm'
+import PrivateRandomChannelForm from '../components/PrivateRandomChannelForm'
 
 export default {
   name: 'channels',
@@ -62,7 +68,8 @@ export default {
   },
 
   components: {
-    'create-channel-form': CreateChannelForm
+    'create-channel-form': CreateChannelForm,
+    'random-channel-form': PrivateRandomChannelForm
   }
 }
 </script>
@@ -72,7 +79,14 @@ export default {
   width: 80%;
 }
 
-.create-channel-form {
+@media(max-width: 600px) {
+  .channels-grid {
+    width: 90%;
+  }
+}
+
+.form-wrapper {
+  width: 100%;
   margin-top: 7vh;
 }
 
@@ -106,6 +120,7 @@ export default {
       padding: 5px;
       margin-bottom: 5px;
       border: 1px solid #e5e5e5;
+      border-radius: 4px;
       cursor: pointer;
 
       &:active {
