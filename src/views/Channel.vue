@@ -266,7 +266,10 @@ export default {
       const message = `User ${user.username} joined the channel...`
 
       this.addMessage(message, { username: 'System' }, new Date(), 'system')
-      this.broadcastUserJoined(user)
+
+      if (user.username !== this.currentUser.username) {
+        this.broadcastUserJoined(user)
+      }
     })
 
     window._socket.on(events.USER_QUIT, (user) => {
