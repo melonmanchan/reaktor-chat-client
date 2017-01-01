@@ -86,6 +86,9 @@ export default {
   }
 
   .channels {
+    max-height: 65vh;
+    overflow-y: auto;
+    overflow-x: hidden;
     display: flex;
     align-items: center;
     flex-direction: column;
