@@ -46,6 +46,11 @@ export default {
     }
   },
 
+  mounted () {
+    // Log out, just in case!
+    this.$bus.emit('logout')
+  },
+
   methods: {
     join (event) {
       event.preventDefault()

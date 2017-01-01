@@ -26,8 +26,10 @@ function connectSocket (token) {
 }
 
 function disconnectSocket () {
-  window._socket.disconnect(true)
-  window._socket = null
+  if (window._socket) {
+    window._socket.disconnect(true)
+    window._socket = null
+  }
 }
 
 export { connectSocket, disconnectSocket }

@@ -37,7 +37,10 @@ export default {
       disconnectSocket()
       deleteAuthorizationToken()
       Storage.clearStorage()
-      this.$router.push('login')
+
+      if (this.$route.path !== '/login') {
+        this.$router.push('login')
+      }
     }
   },
 
