@@ -15,7 +15,7 @@ Live: https://reaktor-chat.surge.sh
 Once logged in, feel free to join any of the channels in the lobby, or create
 your own.
 
-[![Screenshot](https://i.imgur.com/MBAFwRb.png)]
+![Screenshot](https://i.imgur.com/MBAFwRb.png)
 
 ## Build Setup
 First off, install Yarn:
