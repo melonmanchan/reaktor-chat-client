@@ -114,6 +114,10 @@ export default {
         m.message = this.formatMessage(m.message)
         m.type = 'user'
 
+        if (m.user === this.currentUser.username) {
+          m.user = 'You'
+        }
+
         return m
       })
 
