@@ -5,8 +5,8 @@ function joinChannel (key) {
   return axios.post(`${config.backend}/channels/${key}/join`)
 }
 
-function createChannel (name, isPublic) {
-  return axios.post(`${config.backend}/channels`, { name, isPublic })
+function createChannel (name) {
+  return axios.post(`${config.backend}/channels`, { name })
 }
 
 function getChannels () {

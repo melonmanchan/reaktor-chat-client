@@ -2,15 +2,10 @@
   <div>
     <form class="pure-form">
       <fieldset>
-        <legend>Create new channel</legend>
+        <legend>Create public channel</legend>
 
         <div class="form-elements">
-          <div>
-            <input v-model="channelName" type="text" placeholder="Channel name">
-            <label for="isPublic">
-              <input v-model="isPublic" id="isPublic" type="checkbox"> Public?
-            </label>
-          </div>
+          <input v-model="channelName" type="text" placeholder="Channel name">
           <button :disabled="createDisabled" v-on:click="create" type="submit" class="pure-button pure-button-primary">Create</button>
         </div>
 
@@ -27,7 +22,6 @@ export default {
   data () {
     return {
       channelName: '',
-      isPublic: true,
       createDisabled: false
     }
   },
@@ -41,7 +35,7 @@ export default {
 
       this.createDisabled = true
 
-      createChannel(this.channelName, this.isPublic)
+      createChannel(this.channelName)
         .then((resp) => {
           const newChannel = resp.data
           this.$bus.emit('channel:add', newChannel)
