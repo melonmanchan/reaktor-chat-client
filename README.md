@@ -1,12 +1,27 @@
-# reaktor-chat-client
+# Reaktor Chat Client
+Socket.io, IRC-like chat application, made with [Vue.js](https://vuejs.org/).
 
-> A Vue.js project
+Live: https://reaktor-chat.surge.sh
+
+## Features
+- Registering and logging in
+- Private and public channels
+- Mobile-friendly interface
+- Full message history for any channel
+- Desktop/mobile notifications
+- Scalable [backend architecture](https://github.com/melonmanchan/reaktor-chat-server)
+- Markdown and emoji support!
 
 ## Build Setup
+First off, install Yarn:
+
+https://yarnpkg.com/
 
 ``` bash
 # install dependencies
-npm install
+git clone https://github.com/melonmanchan/reaktor-chat-client
+cd reaktor-chat-client
+yarn
 
 # serve with hot reload at localhost:8080
 npm run dev
@@ -14,7 +29,5 @@ npm run dev
 # build for production with minification
 npm run build
 ```
-
-For detailed explanation on how things work, checkout the [guide](http://vuejs-templates.github.io/webpack/) and [docs for vue-loader](http://vuejs.github.io/vue-loader).
 
 [![Build Status](https://travis-ci.org/melonmanchan/reaktor-chat-client.svg?branch=master)](https://travis-ci.org/melonmanchan/reaktor-chat-client)
