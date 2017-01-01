@@ -341,8 +341,6 @@ export default {
 
   button {
     float: right;
-    margin-top: 0.7em;
-    width: 10% !important;
   }
 
   @media (min-width: 600px) {
@@ -352,8 +350,12 @@ export default {
   }
 
   @media (max-width: 600px) {
+    .controls {
+      top: 0;
+    }
+
     #messagebox {
-     width: 80%;
+     width: 70%;
     }
   }
 
