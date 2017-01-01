@@ -17,6 +17,14 @@ const Storage = {
     return JSON.parse(window.localStorage.getItem(PREFIX + 'info'))
   },
 
+  saveAvailableChannels (channels) {
+    window.localStorage.setItem(PREFIX + 'channels', JSON.stringify(channels))
+  },
+
+  getAvailableChannels () {
+    return JSON.parse(window.localStorage.getItem(PREFIX + 'channels'))
+  },
+
   clearStorage () {
     window.localStorage.clear()
   },

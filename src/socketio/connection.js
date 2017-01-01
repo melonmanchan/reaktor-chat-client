@@ -14,19 +14,19 @@ function connectSocket (token) {
     })
 
     window._socket.once(events.NAME_TAKEN, () => {
-      window._socket.disconnect()
+      window._socket.disconnect(true)
       reject(new Error('That name is already taken'))
     })
 
     window._socket.once(events.CONNECT_ERROR, () => {
-      window._socket.disconnect()
+      window._socket.disconnect(true)
       reject(new Error('Error connecting to server'))
     })
   })
 }
 
 function disconnectSocket () {
-  window._socket.disconnect()
+  window._socket.disconnect(true)
   window._socket = null
 }
 

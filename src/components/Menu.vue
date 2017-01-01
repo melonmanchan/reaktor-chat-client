@@ -30,6 +30,8 @@
 </template>
 
 <script>
+import Storage from '../localstorage'
+
 export default {
   data () {
     return {
@@ -37,6 +39,10 @@ export default {
       channels: [],
       users: []
     }
+  },
+
+  mounted () {
+    this.channels = Storage.getAvailableChannels()
   },
 
   created () {

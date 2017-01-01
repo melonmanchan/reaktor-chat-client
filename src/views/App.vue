@@ -34,7 +34,6 @@ export default {
 
   methods: {
     logOut () {
-      console.log('hello')
       disconnectSocket()
       deleteAuthorizationToken()
       Storage.clearStorage()

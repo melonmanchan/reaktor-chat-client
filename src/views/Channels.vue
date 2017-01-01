@@ -22,6 +22,8 @@
 <script>
 import { getChannels } from '../api/channels'
 
+import Storage from '../localstorage'
+
 export default {
   data () {
     return {
@@ -39,6 +41,7 @@ export default {
       getChannels()
         .then(resp => {
           this.channels = resp.data.channels
+          Storage.saveAvailableChannels(resp.data.channels)
           this.$bus.emit('channel:refresh', this.channels)
         })
         .catch(e => {
