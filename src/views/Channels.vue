@@ -1,9 +1,9 @@
 <template>
   <div>
   <div class="rooms-view">
-    <div class="pure-g">
+    <div class="pure-g channels-grid">
       <div class="pure-u-1">
-        <h1>Join a channel</h1>
+        <h1>Public channels</h1>
       </div>
 
       <div class="channels pure-u-1">
@@ -14,6 +14,9 @@
           </p>
         </div>
       </div>
+      <div class="pure-u-1 create-channel-form">
+        <create-channel-form></create-channel-form>
+      </div>
     </div>
   </div>
   </div>
@@ -22,7 +25,8 @@
 <script>
 import { getChannels } from '../api/channels'
 
-import Storage from '../localstorage'
+import Storage           from '../localstorage'
+import CreateChannelForm from '../components/CreateChannelForm'
 
 export default {
   name: 'channels',
@@ -53,11 +57,23 @@ export default {
     join (channel) {
       this.$router.push({ name: 'channel', params: { id: channel.key, name: channel.name } })
     }
+  },
+
+  components: {
+    'create-channel-form': CreateChannelForm
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.channels-grid {
+  width: 80%;
+}
+
+.create-channel-form {
+  margin-top: 7vh;
+}
+
 .rooms-view {
   display: flex;
   justify-content: center;
@@ -70,8 +86,10 @@ export default {
   }
 
   .channels {
-    max-height: 50vh;
     overflow-y: auto;
+    overflow-x: hidden;
+
+    max-height: 60vh;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -83,6 +101,7 @@ export default {
         font-size: 0.8em;
       }
 
+      width: 100%;
       padding: 5px;
       margin-bottom: 5px;
       border: 1px solid #e5e5e5;
