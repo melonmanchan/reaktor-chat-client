@@ -320,9 +320,8 @@ export default {
   }
 
   #messagebox {
-    position: static;
-    bottom: 20px;
-    width: 90%;
+    position: absolute;
+    z-index: 100;
   }
 
   button {
