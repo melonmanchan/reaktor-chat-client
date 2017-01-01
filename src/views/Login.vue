@@ -19,11 +19,12 @@
 </template>
 
 <script>
-import connectSocket             from '../socketio/connect'
 import Storage                   from '../localstorage'
+
+import { connectSocket }         from '../socketio/connection'
 import { login }                 from '../api/auth'
-import { setAuthorizationToken } from '../api'
 import { requestPermission }     from '../notifications'
+import { setAuthorizationToken } from '../api'
 
 export default {
   data () {

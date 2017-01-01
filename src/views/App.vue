@@ -8,7 +8,11 @@
 </template>
 
 <script>
-import Menu from '../components/Menu.vue'
+import Menu    from '../components/Menu.vue'
+import Storage from '../localstorage'
+
+import { deleteAuthorizationToken } from '../api'
+import { disconnectSocket }         from '../socketio/connection'
 
 export default {
   name: 'app',
@@ -25,6 +29,17 @@ export default {
 
   mounted () {
     document.getElementById('preload').classList = 'hidden'
+    this.$bus.on('logout', this.logOut)
+  },
+
+  methods: {
+    logOut () {
+      console.log('hello')
+      disconnectSocket()
+      deleteAuthorizationToken()
+      Storage.clearStorage()
+      this.$router.push('login')
+    }
   },
 
   components: {

@@ -15,9 +15,14 @@
       </div>
       <span class="pure-menu-heading div-bottom">Channels</span>
       <ul class="pure-menu-list">
-        <router-link :to="{ name: 'channels'}" class="pure-menu-link menu-item-divided">Lobby</router-link>
+        <router-link :to="{ name: 'channels'}" class="pure-menu-link">Lobby</router-link>
         <li class="pure-menu-item" v-for="c in channels">
           <router-link class="pure-menu-link" :to="{ name: 'channel', params: { id: c.key, name: c.name}}">{{c.name}}</router-link>
+        </li>
+      </ul>
+      <ul class="pure-menu-list">
+        <li class='pure-menu-item'>
+          <a href="#" class="pure-menu-link div-top" v-on:click="$bus.emit('logout')">Log out</a>
         </li>
       </ul>
     </div>

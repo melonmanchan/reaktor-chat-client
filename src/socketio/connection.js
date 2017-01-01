@@ -4,7 +4,7 @@ import events from './events'
 
 function connectSocket (token) {
   return new Promise((resolve, reject) => {
-    window._socket = window.io(config.backend, { query: `token=${token}` })
+    window._socket = window.io(config.backend, { query: `token=${token}`, forceNew: true })
 
     window._socket.once(events.LOGGED_IN, () => {
       resolve()
@@ -25,4 +25,9 @@ function connectSocket (token) {
   })
 }
 
-export default connectSocket
+function disconnectSocket () {
+  window._socket.disconnect()
+  window._socket = null
+}
+
+export { connectSocket, disconnectSocket }

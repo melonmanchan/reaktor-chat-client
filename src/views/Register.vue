@@ -21,8 +21,8 @@
 <script>
 import debounce from 'lodash.debounce'
 
-import connectSocket             from '../socketio/connect'
 import Storage                   from '../localstorage'
+import { connectSocket }         from '../socketio/connection'
 import { register }              from '../api/auth'
 import { setAuthorizationToken } from '../api'
 

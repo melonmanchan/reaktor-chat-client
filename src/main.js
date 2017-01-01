@@ -6,7 +6,7 @@ import VueBus    from 'vue-bus'
 import Promise   from 'bluebird'
 
 import Storage                   from './localstorage'
-import connectSocket             from './socketio/connect'
+import { connectSocket }         from './socketio/connection'
 import { setAuthorizationToken } from './api'
 
 import App      from './views/App'
