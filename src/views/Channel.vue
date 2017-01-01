@@ -319,9 +319,15 @@ export default {
     height: 90vh;
   }
 
+  .controls {
+    position: relative;
+    top: 60px;
+  }
+
   #messagebox {
     position: absolute;
-    z-index: 100;
+    bottom: 0;
+    width: 100%;
   }
 
   button {

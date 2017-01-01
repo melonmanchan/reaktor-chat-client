@@ -138,6 +138,7 @@ export default {
 
 <style lang="scss">
 .pure-menu {
+  z-index: 100;
   line-height: 1.7;
   background: #191818;
   position: fixed;
