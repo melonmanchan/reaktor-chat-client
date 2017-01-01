@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import Storage from '../localstorage'
+import { ChannelStore } from '../store'
 
 export default {
   data () {
@@ -42,7 +42,7 @@ export default {
   },
 
   mounted () {
-    this.channels = Storage.getAvailableChannels()
+    this.channels = ChannelStore.getPublic()
   },
 
   created () {

@@ -24,8 +24,8 @@
 
 <script>
 import { getChannels } from '../api/channels'
+import { ChannelStore }  from '../store'
 
-import Storage           from '../localstorage'
 import CreateChannelForm from '../components/CreateChannelForm'
 
 export default {
@@ -46,8 +46,10 @@ export default {
     loadChannels () {
       getChannels()
         .then(resp => {
+          ChannelStore.refreshPublicChannels(resp.data.channels)
+
           this.channels = resp.data.channels
-          Storage.saveAvailableChannels(resp.data.channels)
+          ChannelStore.refreshPublicChannels(resp.data.channels)
           this.$bus.emit('channel:refresh', this.channels)
         })
         .catch(e => {

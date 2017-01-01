@@ -17,12 +17,20 @@ const Storage = {
     return JSON.parse(window.localStorage.getItem(PREFIX + 'info'))
   },
 
-  saveAvailableChannels (channels) {
-    window.localStorage.setItem(PREFIX + 'channels', JSON.stringify(channels))
+  savePublicChannels (channels) {
+    window.localStorage.setItem(PREFIX + 'public-channels', JSON.stringify(channels))
   },
 
-  getAvailableChannels () {
-    return JSON.parse(window.localStorage.getItem(PREFIX + 'channels'))
+  savePrivateChannels (channels) {
+    window.localStorage.setItem(PREFIX + 'private-channels', JSON.stringify(channels))
+  },
+
+  getPublicChannels () {
+    return JSON.parse(window.localStorage.getItem(PREFIX + 'public-channels')) || []
+  },
+
+  getPrivateChannels () {
+    return JSON.parse(window.localStorage.getItem(PREFIX + 'private-channels')) || []
   },
 
   clearStorage () {

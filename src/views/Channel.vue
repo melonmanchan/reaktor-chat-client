@@ -28,8 +28,10 @@ import debounce from 'lodash.debounce'
 
 import events from '../socketio/events'
 import Storage from '../localstorage'
-import { sendNotification } from '../notifications'
-import { joinChannel, loadHistory } from '../api/channels'
+
+import { ChannelStore }                                        from '../store'
+import { sendNotification }                                    from '../notifications'
+import { joinChannel, loadHistory }                            from '../api/channels'
 import { stringArrayToJSON, markdownifyString, emojifyString } from '../utils'
 
 export default {
@@ -238,7 +240,7 @@ export default {
 
   mounted () {
     const key = this.$route.params.id
-    const name = this.$route.params.name
+    const name = this.$route.params.name || ChannelStore.getChannelNameForKey(key)
 
     document.title = `${name}`
 

@@ -6,6 +6,7 @@ import VueBus    from 'vue-bus'
 import Promise   from 'bluebird'
 
 import Storage                   from './localstorage'
+import { ChannelStore }          from './store'
 import { connectSocket }         from './socketio/connection'
 import { setAuthorizationToken } from './api'
 
@@ -18,6 +19,8 @@ import Register from './views/Register'
 Vue.use(VueBus)
 Vue.use(VueRouter)
 Vue.use(VueMoment)
+
+ChannelStore.deserializeChannels()
 
 const routes = [
   { path: '/login', name: 'login', component: Login, meta: { title: 'Login' } },

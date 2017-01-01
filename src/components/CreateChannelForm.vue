@@ -16,6 +16,7 @@
 
 <script>
 import { createChannel } from '../api/channels'
+import { ChannelStore }  from '../store'
 
 export default {
   name: 'create-channel-form',
@@ -38,6 +39,7 @@ export default {
       createChannel(this.channelName)
         .then((resp) => {
           const newChannel = resp.data
+          ChannelStore.addPublic(newChannel)
           this.$bus.emit('channel:add', newChannel)
           this.createDisabled = false
         })
