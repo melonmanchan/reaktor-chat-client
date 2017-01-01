@@ -86,10 +86,6 @@ export default {
   }
 
   .channels {
-    overflow-y: auto;
-    overflow-x: hidden;
-
-    max-height: 60vh;
     display: flex;
     align-items: center;
     flex-direction: column;
@@ -101,7 +97,7 @@ export default {
         font-size: 0.8em;
       }
 
-      width: 100%;
+      width: 98%;
       padding: 5px;
       margin-bottom: 5px;
       border: 1px solid #e5e5e5;

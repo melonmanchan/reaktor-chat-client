@@ -82,8 +82,8 @@ export default {
       this.channels = channels
     },
 
-    channelAdd (channels) {
-
+    channelAdd (channel) {
+      this.channels.push(channel)
     },
 
     usersRefresh (users) {

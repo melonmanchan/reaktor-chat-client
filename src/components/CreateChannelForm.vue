@@ -43,9 +43,8 @@ export default {
 
       createChannel(this.channelName, this.isPublic)
         .then((resp) => {
-          console.log(resp.data)
           const newChannel = resp.data
-          console.log(newChannel)
+          this.$bus.emit('channel:add', newChannel)
           this.createDisabled = false
         })
         .catch((err) => {
