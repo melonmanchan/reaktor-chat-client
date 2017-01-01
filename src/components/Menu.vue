@@ -200,6 +200,10 @@ export default {
   margin-top: 0.6em;
 }
 
+.router-link-active {
+  color: #e3e3e3;
+}
+
 .menu-link.active {
   left: 170px;
 }
