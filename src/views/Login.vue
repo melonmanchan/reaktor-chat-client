@@ -46,7 +46,7 @@ export default {
     }
   },
 
-  mounted () {
+  created () {
     // Log out, just in case!
     this.$bus.emit('logout')
   },

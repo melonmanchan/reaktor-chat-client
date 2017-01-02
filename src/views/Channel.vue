@@ -227,13 +227,15 @@ export default {
     delete window.onfocus
     delete window.onblur
 
-    window._socket.off(events.USER_JOINED)
-    window._socket.off(events.USER_LEFT)
-    window._socket.off(events.USER_QUIT)
-    window._socket.off(events.MESSAGE_POST)
-    window._socket.off(events.USER_STATUS_CHANGE)
+    if (window._socket) {
+      window._socket.off(events.USER_JOINED)
+      window._socket.off(events.USER_LEFT)
+      window._socket.off(events.USER_QUIT)
+      window._socket.off(events.MESSAGE_POST)
+      window._socket.off(events.USER_STATUS_CHANGE)
 
-    window._socket.emit(events.USER_LEFT, { channel: this.key })
+      window._socket.emit(events.USER_LEFT, { channel: this.key })
+    }
 
     this.broadcastUserLeft(this.currentUser)
   },

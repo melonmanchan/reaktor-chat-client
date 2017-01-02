@@ -56,13 +56,15 @@ export default {
   },
 
   beforeDestroy () {
-    this.$bus.off('channel:refresh', this.channelRefresh)
-    this.$bus.off('channel:add', this.channelAdd)
+    if (this.$bus) {
+      this.$bus.off('channel:refresh', this.channelRefresh)
+      this.$bus.off('channel:add', this.channelAdd)
 
-    this.$bus.off('users:refresh', this.usersRefresh)
-    this.$bus.off('users:leave', this.removeUser)
-    this.$bus.off('users:join', this.addUser)
-    this.$bus.off('users:status_changed', this.changeUserStatus)
+      this.$bus.off('users:refresh', this.usersRefresh)
+      this.$bus.off('users:leave', this.removeUser)
+      this.$bus.off('users:join', this.addUser)
+      this.$bus.off('users:status_changed', this.changeUserStatus)
+    }
   },
 
   methods: {

@@ -39,7 +39,7 @@ export default {
       Storage.clearStorage()
 
       if (this.$route.path !== '/login') {
-        this.$router.push('login')
+        this.$router.push({ name: 'login' })
       }
     }
   },
