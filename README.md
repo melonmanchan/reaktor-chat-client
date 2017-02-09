@@ -1,8 +1,9 @@
 # Reaktor Chat Client
 Socket.io, IRC-like chat application, made with [Vue.js](https://vuejs.org/).
+Originally made for Reaktor, as part of their summer internship challenge.
 
-Live: https://reaktor-chat.surge.sh
-
+They ended up hiring me, if you've stumbled upon this repository to dig for
+more info!
 ## Features
 - Registering and logging in
 - Private and public channels
